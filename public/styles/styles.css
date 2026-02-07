@@ -1,0 +1,52 @@
+/* Logo */
+#logo {
+    font-size: 280%;
+    line-height: 75px;
+    margin: 0 0.5rem;
+    text-align: center;
+}
+
+/* Navgiation underline on hover */
+.nav .nav-link {
+  text-decoration: none;              
+}
+
+.nav .nav-link:hover,
+.nav .nav-link:focus-visible {
+  text-decoration: underline;         
+  text-underline-offset: 3px;
+  text-decoration-thickness: 2px;
+}
+
+/* Centered list bullets */
+.centered-list { list-style-position: inside; }  
+
+/* Narrow content column */
+.content-narrow {
+  max-width: 720px;  
+}
+
+/* Social links layout */
+.social{
+  display:flex;
+  flex-direction:row;
+  justify-content:space-evenly;
+  margin:5px;
+  padding:10px;
+}
+
+/* Social icon hover */
+.social a:hover i{ 
+    color:red; 
+    transform: scale(1.5);
+}
+
+/* Social icon default */
+.social a{ color:black; }
+
+/* Hide committee link on small screens */
+@media (max-width: 768px) {
+  a[href="#committee"] {
+    display: none;
+  }
+}

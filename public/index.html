@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Mountain Trail Running Club</title>
+    
+    <link rel="stylesheet" href="stylesheets/styles.css">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- FontAwesome CSS -->
+     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    
+     <!-- Site CSS Stylesheet -->
+    <link href="styles/styles.css" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link href="images/mountain.gif" rel="icon" type="image/gif">
+  </head>
+
+  <body class="bg-light">
+
+  <header>
+    
+    <br>
+      <h1 id="logo">Mountain Trail Running Club</h1><br>
+
+      <!-- Icons -->
+      <div class="text-center text-muted">
+        <span title="Endurance" aria-label="Endurance"><i class="fa-solid fa-person-running">&nbsp;&nbsp;&nbsp; Endurance &nbsp;&nbsp;</i></span>
+        <span title="Navigation" aria-label="Navigation"><i class="fa-solid fa-compass">&nbsp;&nbsp;&nbsp;  Navigation &nbsp;&nbsp;</i></span>
+        <span title="Nature" aria-label="Nature"><i class="fa-solid fa-leaf">&nbsp;&nbsp;&nbsp;  Nature &nbsp;&nbsp;</i></span>
+        <span title="Friendship" aria-label="Friendship"><i class="fa-solid fa-people-group">&nbsp;&nbsp;&nbsp;  Friendship &nbsp;&nbsp;</i></span>
+      </div>
+    <br>
+    <hr>
+
+      <!-- Navigation links for in-page anchors to quick jump to -->
+      <nav class="nav justify-content-center gap-4 py-2">
+        <a class="nav-link p-0 link-primary
+                  link-underline link-underline-opacity-0
+                  link-underline-opacity-100-hover link-offset-2"
+          href="#news">News</a>
+
+        <a class="nav-link p-0 link-primary
+                  link-underline link-underline-opacity-0
+                  link-underline-opacity-100-hover link-offset-2"
+          href="#training">Training Tips</a>          
+
+        <a class="nav-link p-0 link-primary
+                  link-underline link-underline-opacity-0
+                  link-underline-opacity-100-hover link-offset-2"
+          href="#events">Events &amp; Results</a>
+
+        <a class="nav-link p-0 link-primary
+                  link-underline link-underline-opacity-0
+                  link-underline-opacity-100-hover link-offset-2"
+          href="#comments">Comments</a>
+
+        <a class="nav-link p-0 link-primary
+                  link-underline link-underline-opacity-0
+                  link-underline-opacity-100-hover link-offset-2"
+          href="#committee">Club Committee</a>
+      </nav>
+      <br>
+  </header>
+
+  <!-- News & Training -->
+    <main class="container mb-5">
+      <section id="news" class="mb-5">
+        <h2 class="h3 mb-3 text-center">News &amp; Training Tips</h2>
+        <div class="row g-4">
+        <br>
+          <div class="d-flex justify-content-center mb-3">
+            <figure class="figure text-center mb-0">
+              <img
+                src="images/club_image.jpg"
+                alt="Club runner in the mountains"
+                class="figure-img img-fluid rounded shadow-sm"
+                style="max-width: 420px;">
+              <figcaption class="figure-caption">Image &copy; 2025 FreePik</figcaption>
+            </figure>
+          </div>
+
+          <!-- News card -->
+          <div class="col-md-6">
+            <div class="card h-100">
+              <div class="card-body">
+                <h3 class="h5 text-center">News</h3>
+                <ul class="mb-0">
+                  <li>
+                    <strong>Club Night Run — Nire Valley (Thu 7:30 pm):</strong>
+                    Headlamps required; short and long loops marked. Car share from town at
+                    6:45 pm.
+                  </li>
+                  <li>
+                    <strong>Coumshingaun Skills Session (Sat 9:00 am):</strong>
+                    Navigation refresh: bearings, attack points, and safe routes.
+                  </li>
+                  <li>
+                    <strong>Trail Tidy &amp; Flagging (Sun 10:00 am):</strong>
+                    Light pruning above Mahon Falls. Gloves supplied.
+                  </li>
+                  <li>
+                    <strong>Winter Series #1: The Gap (Next Wed):</strong>
+                    6 km &amp; 10 km options; climb-heavy. Registration opens Monday 7:00 pm.
+                  </li>
+                  <li>
+                    <strong>New to Trail?</strong> Intro group every Tuesday 6:30 pm in Colligan
+                    Woods with <i>no one left behind</i>.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Training tips card -->
+          <div id="training" class="col-md-6">
+            <div class="card h-100">
+              <div class="card-body">
+                <h3 class="h5 text-center">Training Tips</h3>
+                <ul class="mb-0">
+                  <li>
+                    <strong>Kit check:</strong> trail shoes with grip, headlamp for dusk runs, lightweight shell.
+                  </li>
+                  <li>
+                    <strong>Technique:</strong> hike the steeps, open your stride on descents, relax shoulders.
+                  </li>
+                  <li>
+                    <strong>Weekly plan:</strong> Tue intervals, Thu steady trail, Sun long run.
+                  </li>
+                  <li>
+                    <strong>Safety:</strong> whistle &amp; phone mandatory for night sessions.
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Events & Results -->
+      <section id="events" class="mb-5">
+        <h2 class="h3 mb-3 text-center">Events &amp; Results</h2>
+        <div class="table-responsive">
+          <table class="table table-striped table-bordered align-middle">
+            <thead class="table-dark">
+              <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Event</th>
+                <th scope="col">Route / Surface</th>
+                <th scope="col">Distance</th>
+                <th scope="col">Elevation</th>
+                <th scope="col">Results</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Sat 18 Oct</td>
+                <td>Comeragh Ridge Night Run</td>
+                <td>Technical singletrack • rocky</td>
+                <td>12.4 km</td>
+                <td>+780 m</td>
+                <td>1st: Ian H. • 2nd: Steve D. • 3rd: Griffin F.</td>
+              </tr>
+              <tr>
+                <td>Sun 19 Oct</td>
+                <td>Club Social Trail</td>
+                <td>Forest loop • soft</td>
+                <td>8.0 km</td>
+                <td>+210 m</td>
+                <td>1st: Elaine W. • 2nd: Mary L. • 3rd: Kathleen W.</td>
+              </tr>
+              <tr>
+                <td>Sun 26 Oct</td>
+                <td>Regional Trail Challenge</td>
+                <td>Alpine style • mixed</td>
+                <td>16.0 km</td>
+                <td>+1,050 m</td>
+                <td>1st: Aoife M. • 2nd: Mark R. • 3rd: Liam O.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Comments -->
+      <section id="comments" class="mb-5">
+        <h2 class="h3 mb-4 text-center">Comments</h2>
+        <div class="row g-4">
+
+          <!-- Comments Form -->
+          <div class="col-lg-5">
+            <div class="card shadow-sm">
+              <div class="card-body">
+                <h3 class="h5 mb-3 text-center">Leave a comment</h3>
+                <form id="commentForm" novalidate>
+                  <div class="mb-3">
+                    <label for="handle" class="form-label">Handle</label>
+                    <input
+                      type="text"
+                      id="handle"
+                      class="form-control"
+                      placeholder="@trailrunner23"
+                      required>
+                    <div class="form-text">Please don’t use <code>hacker</code> as a handle.</div>
+                  </div>
+                  <div class="mb-3">
+                    <label for="commentText" class="form-label">Comment</label>
+                    <textarea
+                      id="commentText"
+                      class="form-control"
+                      rows="4"
+                      placeholder="That Nire night run was epic..."
+                      required></textarea>
+                  </div>
+                  <button type="submit" class="btn btn-primary w-100">Post</button>
+                  <div id="commentError" class="alert alert-danger mt-3 d-none"></div>
+                </form>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Latest comments-->
+          <div class="col-lg-7">
+            <h3 class="h5 mb-3 text-center">Latest comments</h3>
+            <div id="commentList" class="row g-3">
+            </div>
+          </div>
+        </div>
+      <br>  
+      </section>
+
+        <!-- Committee -->
+        <section id="committee" class="mb-5 d-none d-sm-block" aria-labelledby="committee-heading">
+      
+        <div class="card shadow-sm border-accent"><br>
+        <div  class="card-header bg-white">
+          <h3 id="committee-heading" class="text-center mb-0">Club Committee</h3>
+        <br>
+        </div>
+        <div class="card-body">
+          <div class="text-center row g-4 align-items-start">
+
+            <!-- Chairperson -->
+            <div class="col-12 col-sm-4">
+              <figure class="figure w-100">
+                <figcaption class="figure-caption text-center"><b>Chairperson</b></figcaption><br>
+                <img src="images/chairperson.jpg" class="figure-img img-fluid rounded committee-img" alt="Coach leading runners on a mountain trail" height= 70% width=70%>
+                <figcaption class="figure-caption text-center">Image &copy; 2025 FreePik</figcaption>
+              </figure>
+            </div>
+
+            <!-- Secretary -->
+            <div class="col-12 col-sm-4">
+              <figure class="figure w-100">
+                <figcaption class="figure-caption text-center"><b>Secretary</b></figcaption><br>
+                <img src="images/secretary.jpg" class="figure-img img-fluid rounded committee-img" alt="Runner checking a map on a ridge" height= 75% width=75%>
+                <figcaption class="figure-caption text-center">Image &copy; 2025 Dreamstime</figcaption>
+              </figure>
+            </div>
+
+            <!-- Treasurer -->
+            <div class="col-12 col-sm-4">
+              <figure class="figure w-100">
+                <figcaption class="figure-caption text-center"><b>Treasurer</b></figcaption><br>
+                <img src="images/treasurer.jpg" class="figure-img img-fluid rounded committee-img" alt="Trail runners descending at sunset" height= 75% width=75%>
+                <figcaption class="figure-caption text-center">Image &copy; 2025 FreePik</figcaption>
+              </figure>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Social media links -->
+  <footer>
+    <div class="container text-center">
+    
+    <hr>
+    <div class="social">
+      <a href="https://www.facebook.com/" target="_blank" rel="noopener"> 
+        <i class="fa-brands fa-facebook fa-2xl"></i>
+      </a>
+      <a href="https://www.x.com/" target="_blank" rel="noopener">
+        <i class="fa-brands fa-square-x-twitter fa-2xl"></i>
+      </a>
+      <a href="https://www.linkedin.com/" target="_blank" rel="noopener">
+        <i class="fa-brands fa-linkedin fa-2xl"></i>
+      </a>
+      <a href="https://www.pinterest.com/" target="_blank" rel="noopener">
+        <i class="fa-brands fa-pinterest fa-2xl"></i>
+      </a>
+      <a href="https://www.instagram.com/" target="_blank" rel="noopener">
+        <i class="fa-brands fa-instagram fa-2xl"></i>
+      </a>
+      <a href="https://www.youtube.com/" target="_blank" rel="noopener">
+        <i class="fa-brands fa-youtube fa-2xl"></i>
+      </a>
+    </div>
+    <hr>
+
+    <span class="text-center">© 2025 Mountain Trail Running Club</span><br>
+    <br>
+    </div>
+  </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Comments JS -->
+    <script src="javascripts/comments.js"></script>
+  </body>
+</html>
