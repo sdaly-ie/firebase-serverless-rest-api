@@ -1,9 +1,11 @@
+
 # Firebase Serverless REST API Demo
 
 A small end-to-end demo with a simple website hosted on Firebase, which calls a REST API that runs on Firebase Cloud Functions, and stores comments in Firestore.
 
 ## Live Demo
-- Website: https://assignment4-54794.web.app/
+- Website (Firebase Hosting): https://assignment4-54794.web.app/
+- Website (custom link): https://s-daly.ie/firebase-serverless-rest-api
 - API health check: https://us-central1-assignment4-54794.cloudfunctions.net/api/health
 
 ## What this project shows
@@ -28,8 +30,9 @@ Expected response:
 ### `GET /comments`
 Returns the latest comments (newest first).
 
-Example response: 
+Example response:
 ```json
+[
   {
     "id": "c4fdZfsbycWuJMTK4Je2",
     "handle": "@stephen",
@@ -72,8 +75,8 @@ Example response:
     "text": "Posting from Postman",
     "createdAt": "2026-02-03T23:13:05.495Z"
   }
+]
 ```
-
 
 ### `POST /comments`
 Creates a new comment.
@@ -96,7 +99,7 @@ You can test the API directly (without the website) using Postman.
 - URL: `https://us-central1-assignment4-54794.cloudfunctions.net/api/health`
 - Expected: `200 OK` with JSON showing the API is running
 
-![Expected result for GET /comments](public/images/health.jpg)
+![Expected result for GET /health](public/images/health.jpg)
 
 ### 2) List comments
 - Method: `GET`
@@ -136,12 +139,49 @@ Quick check: run `GET /comments` again and confirm the new comment appears near 
 - `functions/` — API code (Express app deployed as a Cloud Function)
 - `firebase.json` / `.firebaserc` — Firebase project configuration
 
+## Engineering Quality and Local Runbook
+
+This repository is being improved using a feature-branch workflow to increase engineering quality and platform-readiness, while preserving the existing public API contract and employer-facing demo links.
+
+### Engineering quality improvements (current)
+- Dependabot for npm and GitHub Actions dependency updates
+- ESLint for `functions/`
+- GitHub Actions Continuous Integration (CI) to run lint checks on push and pull request
+
+### Local quality checks (Functions)
+Run these commands from the `functions/` folder:
+
+```bash
+npm ci
+npm run lint
+```
+
+### CI checks (GitHub Actions)
+CI runs automatically on:
+- pushes to `main`
+- pushes to `feature/platform-readiness`
+- pull requests
+
+### Production safety note
+Changes are developed and tested on a feature branch before any production deploy.
+
+To protect the live demo and employer-facing links, public endpoints are being preserved during upgrades:
+- `GET /health`
+- `GET /comments`
+- `POST /comments`
+
+### Troubleshooting
+- If lint fails due to missing config, check that `functions/eslint.config.cjs` exists
+- If dependencies behave unexpectedly, delete `functions/node_modules` and run `npm ci` again
+- Avoid running `npm audit fix --force` during structured upgrade commits unless intentionally planned
+
 ## Run locally (Firebase emulators)
 Prereqs: Node.js + Firebase CLI
 
 ```bash
 cd functions
-npm install
+npm ci
+npm run lint
 cd ..
 firebase emulators:start --only functions,firestore,hosting
 ```
@@ -151,5 +191,23 @@ firebase emulators:start --only functions,firestore,hosting
 firebase deploy --only hosting,functions
 ```
 
+## Engineering Quality (Platform Readiness)
+
+This project includes a small platform-readiness upgrade to improve maintainability and reliability without changing the public API contract.
+
+### What was added
+- **ESLint** for JavaScript code quality checks (`functions/`)
+- **Jest + Supertest** automated tests for core API routes
+- **GitHub Actions CI** to run checks on push and pull request
+- **Dependabot** for dependency update monitoring (npm + GitHub Actions)
+
+### Local quality checks (recommended before pushing)
+From the `functions/` folder:
+
+```bash
+npm ci
+npm run lint
+npm test
+
 ## Why I built this
-To practice building and deploying a small working system end-to-end: web UI, REST API, database, and cloud deployment.
+To practice building, validating, and deploying a small end-to-end cloud application: web UI, REST API, database, and hosting/functions deployment on Firebase.
