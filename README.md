@@ -191,5 +191,23 @@ firebase emulators:start --only functions,firestore,hosting
 firebase deploy --only hosting,functions
 ```
 
+## Engineering Quality (Platform Readiness)
+
+This project includes a small platform-readiness upgrade to improve maintainability and reliability without changing the public API contract.
+
+### What was added
+- **ESLint** for JavaScript code quality checks (`functions/`)
+- **Jest + Supertest** automated tests for core API routes
+- **GitHub Actions CI** to run checks on push and pull request
+- **Dependabot** for dependency update monitoring (npm + GitHub Actions)
+
+### Local quality checks (recommended before pushing)
+From the `functions/` folder:
+
+```bash
+npm ci
+npm run lint
+npm test
+
 ## Why I built this
 To practice building, validating, and deploying a small end-to-end cloud application: web UI, REST API, database, and hosting/functions deployment on Firebase.
