@@ -1,0 +1,19 @@
+name: Docker Functions CI
+
+on:
+  push:
+    branches: ["main", "chore/docker-ci"]
+  pull_request:
+
+jobs:
+  docker-lint-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build functions test image
+        run: docker build -t firebase-functions-ci ./functions
+
+      - name: Run lint and tests in container
+        run: docker run --rm firebase-functions-ci sh -lc "npm run lint && npm test"
