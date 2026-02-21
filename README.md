@@ -159,13 +159,15 @@ Quick check: run `GET /comments` again and confirm the new comment appears near 
 
 ## Engineering Quality and Local Runbook
 
-This repository includes a platform-readiness upgrade to improve maintainability and reliability without changing the public API contract or breaking employer-facing demo links.
+This repository includes a platform-readiness upgrade to improve maintainability and reliability without changing the public API contract or breaking public demo links.
 
 ### What was added
 - Dependabot for npm and GitHub Actions dependency updates
 - ESLint for `functions/`
 - Jest + Supertest automated tests for core API routes
 - GitHub Actions CI with separate lint and test jobs on push and pull request
+- Docker-based Functions lint/test workflow (`.github/workflows/docker-functions-ci.yml`)
+- Docker support files for local container validation (`functions/Dockerfile`, `functions/.dockerignore`)
 - Refactor to extract the Express app into `functions/app.js` for easier testing
 
 ### Local quality checks (from repo root)
@@ -180,6 +182,37 @@ npm run lint
 npm test
 ```
 
+### Docker-based validation (local + CI evidence)
+
+This repository also includes a Docker-based lint/test workflow for the `functions/` service so the same checks can be run in a clean container environment.
+
+**Files added for Docker workflow**
+- `functions/Dockerfile`
+- `functions/.dockerignore`
+- `.github/workflows/docker-functions-ci.yml`
+
+**Build the Functions test image (from repo root, Windows CMD)**
+```bash
+docker build -t firebase-functions-ci .\functions
+```
+
+**Run lint in the container**
+```bash
+docker run --rm firebase-functions-ci npm run lint
+```
+
+**Run tests in the container**
+```bash
+docker run --rm firebase-functions-ci npm test
+```
+
+**Alternative (ad-hoc container check using official Node image + mounted folder, Windows CMD)**
+```bash
+docker run --rm -v "%cd%\functions:/app" -w /app node:22-alpine sh -lc "npm ci && npm run lint && npm test"
+```
+
+This Docker workflow is for validation only (local/CI) and does not replace Firebase deployment (`firebase deploy --only hosting,functions`).
+
 ### CI checks (GitHub Actions)
 CI runs automatically on:
 - pushes to `main`
@@ -188,7 +221,7 @@ CI runs automatically on:
 ### Production safety note
 Changes are developed and tested on a feature branch before production deployment.
 
-To protect the live demo and employer-facing links, the public endpoints are preserved during upgrades:
+To protect the live demo and public links, the public endpoints are preserved during upgrades:
 - `GET /health`
 - `GET /comments`
 - `POST /comments`
@@ -198,6 +231,9 @@ To protect the live demo and employer-facing links, the public endpoints are pre
 - If tests fail, confirm `functions/jest.config.cjs` and `functions/__tests__/app.test.js` exist
 - If dependencies behave unexpectedly, delete `functions/node_modules` and run `npm ci` again
 - Avoid running `npm audit fix --force` during structured upgrade commits unless intentionally planned
+
+### Security (dependency update approach)
+Dependabot is enabled; dependency updates are handled via PRs. npm audit fix --force is avoided to prevent breaking changes. Updates are applied incrementally and validated by CI.
 
 ## Run locally (Firebase emulators)
 Prerequisites: Node.js and Firebase CLI
