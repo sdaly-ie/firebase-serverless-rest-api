@@ -1,23 +1,34 @@
-
 # Firebase Serverless REST API Demo
 
-A small end-to-end demo with a simple website hosted on Firebase, which calls a REST API that runs on Firebase Cloud Functions, and stores comments in Firestore.
+A small end-to-end demo with a simple website hosted on Firebase, which calls a REST API running on Firebase Cloud Functions and stores comments in Firestore.
 
 ## Live Demo
 - Website (Firebase Hosting): https://assignment4-54794.web.app/
-- Website (custom link): https://s-daly.ie/firebase-serverless-rest-api
 - API health check: https://us-central1-assignment4-54794.cloudfunctions.net/api/health
+
+> **Note:** A custom domain link is not included here because no custom domain is currently configured for this project.
 
 ## What this project shows
 - A static website (HTML5/CSS3/JavaScript) deployed with Firebase Hosting
-- A serverless REST API built with Cloud Functions v2 & Express
+- A serverless REST API built with Cloud Functions v2 and Express
 - A Firestore database used to store and load comments
 - Basic validation and safe display of user input
+- Linting, automated testing, and Continuous Integration (CI) checks for engineering quality
 
 ## REST API (endpoints)
 
 Base URL:
 - https://us-central1-assignment4-54794.cloudfunctions.net/api
+
+**Note:** If you open the base URL in a browser, you’ll now see a small JSON response (GET /), which makes it easier to do a quick manual API check.
+
+### `GET /`
+Convenience root route for quick browser checks of the API base URL.
+
+Expected response:
+```json
+{ "ok": true, "message": "Firebase Serverless REST API is running" }
+```
 
 ### `GET /health`
 Quick check that the API is running.
@@ -60,7 +71,7 @@ Example response:
   {
     "id": "f9ZQZaWe1yGiwWwX0rkQ",
     "handle": "@stephen",
-    "text": "Transitioned from local testing to cloud-deployed REST API — end-to-end verification complete.",
+    "text": "Transitioned from local testing to cloud-deployed REST API and completed end-to-end verification.",
     "createdAt": "2026-02-03T23:51:45.637Z"
   },
   {
@@ -86,7 +97,7 @@ Example request body:
 { "handle": "@trailrunner23", "text": "Great run today!" }
 ```
 
-After posting a comment, it appears in the Latest comments list (end-to-end check from website → API → Firestore → website).
+After posting a comment, it appears in the Latest comments list (end-to-end check from website to API to Firestore and back to the website).
 
 ![Website after posting a comment](public/images/postcomment.jpg)
 
@@ -125,63 +136,77 @@ Quick check: run `GET /comments` again and confirm the new comment appears near 
 ## Basic checks and safety
 - Requires both `handle` and `text`
 - Blocks the handle `hacker` (checked on the website and again on the API)
-- Displays comments as **text**, not as “web code” (prevents HTML/script injection)
+- Displays comments as **text**, not as rendered HTML/JavaScript (helps prevent script injection)
 - Limits the function to 1 instance (`maxInstances: 1`) to control cost and keep debugging simple
 
 ## Tech Stack
 - Firebase Hosting
-- Firebase Cloud Functions v2 (Node.js) + Express
+- Firebase Cloud Functions v2 (Node.js) and Express
 - Firestore
 - HTML / CSS / JavaScript
+- ESLint
+- Jest + Supertest
+- GitHub Actions (CI)
+- Dependabot
 
 ## Project Structure
-- `public/` — website files (HTML/CSS/JS/images)
-- `functions/` — API code (Express app deployed as a Cloud Function)
-- `firebase.json` / `.firebaserc` — Firebase project configuration
+- `public/` - website files (HTML/CSS/JS/images)
+- `functions/` - API code (Express app deployed as a Cloud Function)
+- `functions/__tests__/` - Jest + Supertest API route tests
+- `.github/workflows/` - CI workflow(s)
+- `.github/dependabot.yml` - dependency update configuration
+- `firebase.json` / `.firebaserc` - Firebase project configuration
 
 ## Engineering Quality and Local Runbook
 
-This repository is being improved using a feature-branch workflow to increase engineering quality and platform-readiness, while preserving the existing public API contract and employer-facing demo links.
+This repository includes a platform-readiness upgrade to improve maintainability and reliability without changing the public API contract or breaking employer-facing demo links.
 
-### Engineering quality improvements (current)
+### What was added
 - Dependabot for npm and GitHub Actions dependency updates
 - ESLint for `functions/`
-- GitHub Actions Continuous Integration (CI) to run lint checks on push and pull request
+- Jest + Supertest automated tests for core API routes
+- GitHub Actions CI with separate lint and test jobs on push and pull request
+- Refactor to extract the Express app into `functions/app.js` for easier testing
 
-### Local quality checks (Functions)
-Run these commands from the `functions/` folder:
+### Local quality checks (from repo root)
+```bash
+cd functions && npm ci && npm run lint && npm test
+```
 
+### Local quality checks (from `functions/` folder)
 ```bash
 npm ci
 npm run lint
+npm test
 ```
 
 ### CI checks (GitHub Actions)
 CI runs automatically on:
 - pushes to `main`
-- pushes to `feature/platform-readiness`
 - pull requests
 
 ### Production safety note
-Changes are developed and tested on a feature branch before any production deploy.
+Changes are developed and tested on a feature branch before production deployment.
 
-To protect the live demo and employer-facing links, public endpoints are being preserved during upgrades:
+To protect the live demo and employer-facing links, the public endpoints are preserved during upgrades:
 - `GET /health`
 - `GET /comments`
 - `POST /comments`
 
 ### Troubleshooting
 - If lint fails due to missing config, check that `functions/eslint.config.cjs` exists
+- If tests fail, confirm `functions/jest.config.cjs` and `functions/__tests__/app.test.js` exist
 - If dependencies behave unexpectedly, delete `functions/node_modules` and run `npm ci` again
 - Avoid running `npm audit fix --force` during structured upgrade commits unless intentionally planned
 
 ## Run locally (Firebase emulators)
-Prereqs: Node.js + Firebase CLI
+Prerequisites: Node.js and Firebase CLI
 
 ```bash
 cd functions
 npm ci
 npm run lint
+npm test
 cd ..
 firebase emulators:start --only functions,firestore,hosting
 ```
@@ -191,23 +216,5 @@ firebase emulators:start --only functions,firestore,hosting
 firebase deploy --only hosting,functions
 ```
 
-## Engineering Quality (Platform Readiness)
-
-This project includes a small platform-readiness upgrade to improve maintainability and reliability without changing the public API contract.
-
-### What was added
-- **ESLint** for JavaScript code quality checks (`functions/`)
-- **Jest + Supertest** automated tests for core API routes
-- **GitHub Actions CI** to run checks on push and pull request
-- **Dependabot** for dependency update monitoring (npm + GitHub Actions)
-
-### Local quality checks (recommended before pushing)
-From the `functions/` folder:
-
-```bash
-npm ci
-npm run lint
-npm test
-
 ## Why I built this
-To practice building, validating, and deploying a small end-to-end cloud application: web UI, REST API, database, and hosting/functions deployment on Firebase.
+To practice building, validating, and deploying a small end-to-end cloud application: web user interface, REST API, database and Firebase Hosting/Cloud Functions deployment.
