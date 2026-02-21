@@ -7,6 +7,14 @@ function createApp({ db, admin, logger }) {
   app.use(cors({ origin: true }));
   app.use(express.json());
 
+  // GET - API root (prevents "Cannot GET /" when opening the base URL in a browser)
+  app.get("/", (req, res) => {
+    res.status(200).json({
+      ok: true,
+      message: "Firebase Serverless REST API is running",
+    });
+  });
+
   // GET - Quick health check
   app.get("/health", (req, res) => {
     res.status(200).json({ ok: true, message: "API is running" });
