@@ -1,14 +1,15 @@
 # Firebase Serverless REST API Demo
 
-**For reviewers:** Please start with **v1.0.0 – Review Snapshot** in [Releases](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases). The `main` branch may include ongoing updates.
+A small end-to-end demo of a static site on Firebase Hosting calling a serverless REST API (Cloud Functions v2 + Express) that stores comments in Firestore.
 
-A small end-to-end demo with a simple website hosted on Firebase, which calls a REST API running on Firebase Cloud Functions and stores comments in Firestore.
+> **For reviewers:** Start with **[v1.0.0 – Review Snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.0.0)** (stable).  
+> The `main` branch may include ongoing updates.
 
 ## Live Demo
 - Website (Firebase Hosting): https://assignment4-54794.web.app/
 - API health check: https://us-central1-assignment4-54794.cloudfunctions.net/api/health
 
-**Note:** A custom domain link is not included here because no custom domain is currently configured for this project.
+> **Note:** A custom domain link is not included here because no custom domain is currently configured for this project.
 
 ## What this project shows
 - A static website (HTML5/CSS3/JavaScript) deployed with Firebase Hosting
