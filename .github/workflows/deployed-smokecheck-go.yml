@@ -1,0 +1,26 @@
+name: Deployed API Smokecheck (Go)
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "15 7 * * *" # daily, UTC
+
+jobs:
+  smokecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.22"
+
+      - name: Run smokecheck
+        working-directory: tools/smokecheck-go
+        env:
+          DEPLOYED_HEALTH_URL: ${{ secrets.DEPLOYED_HEALTH_URL }}
+        run: |
+          go mod tidy
+          go run .
