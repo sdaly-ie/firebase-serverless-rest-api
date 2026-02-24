@@ -16,7 +16,13 @@ A small end-to-end demo of a static site on Firebase Hosting calling a serverles
 - A serverless REST API built with Cloud Functions v2 and Express
 - A Firestore database used to store and load comments
 - Basic validation and safe display of user input
-- Linting, automated testing, and Continuous Integration (CI) checks for engineering quality
+- Linting and automated testing, with CI checks in GitHub Actions
+- Terraform scaffold for Infrastructure as Code
+
+## Terraform and Infrastructure as Code
+
+The `infra/terraform` folder contains a small Terraform scaffold and a GitHub Actions workflow that runs Terraform format checking and validation.  
+It does not provision cloud resources and does not manage Firebase or GCP. It is included as a first Infrastructure as Code iteration.
 
 ## REST API (endpoints)
 
