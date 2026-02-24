@@ -2,8 +2,9 @@
 
 A small end-to-end demo of a static site on Firebase Hosting calling a serverless REST API (Cloud Functions v2 + Express) that stores comments in Firestore.
 
-> **For reviewers:** Start with **[v1.0.0 – Review Snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.0.0)** (stable).  
-> The `main` branch may include ongoing updates.
+> **For reviewers:** Start with **[v1.0.1 – Review Snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.1.0)** (stable).  
+> The `main` branch may include ongoing updates. 
+> Initial snapshot: v1.0.0.
 
 ## Live Demo
 - Website (Firebase Hosting): https://assignment4-54794.web.app/
