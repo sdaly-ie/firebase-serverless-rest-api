@@ -1,3 +1,3 @@
 module github.com/sdaly-ie/firebase-serverless-rest-api/tools/smokecheck-go
 
-go 1.25.0
+go 1.22
