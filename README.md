@@ -2,13 +2,16 @@
 
 A small end-to-end demo of a static site on Firebase Hosting calling a serverless REST API (Cloud Functions v2 + Express) that stores comments in Firestore.
 
-> **For reviewers:** Start with **[v1.1.1 – Review Snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.1.1)** (stable).  
+> **For reviewers:** Start with **[v1.2.0 – Review Snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.2.0)** (stable).  
 > The `main` branch may include ongoing updates.
 > Initial snapshot: v1.0.0.
 
 ## Live Demo
 - Website (Firebase Hosting): https://assignment4-54794.web.app/
 - API health check: https://us-central1-assignment4-54794.cloudfunctions.net/api/health
+
+### Automation
+- **Deployed smokecheck (runtime verification):** GitHub Actions runs a small Go tool that checks the live `/api/health` endpoint (manual and scheduled).
 
 > **Note:** A custom domain link is not included here because no custom domain is currently configured for this project.
 
@@ -19,6 +22,25 @@ A small end-to-end demo of a static site on Firebase Hosting calling a serverles
 - Basic validation and safe display of user input
 - Linting and automated testing, with CI checks in GitHub Actions
 - Terraform scaffold for Infrastructure as Code
+- Deployed runtime smokecheck in GitHub Actions (Go) against `/api/health`
+
+### CI checks (GitHub Actions)
+CI runs automatically on:
+- pushes to `main`
+- pull requests
+
+Additional workflows:
+- **Deployed API Smokecheck (Go):** manual and scheduled workflow that validates the live `/api/health` endpoint (not run on pull requests).
+
+## Runtime architecture
+High-level view of the deployed runtime flow (Hosting -> Functions API -> Firestore).
+
+![Runtime architecture](public/images/runtime-architecture.jpg)
+
+## Dev pipeline and ops checks
+How the repo is validated (CI on push/PR) and how the deployed endpoint is verified (manual and scheduled smokecheck).
+
+![Dev pipeline and ops checks](public/images/dev-pipeline-ops.jpg)
 
 ## Terraform and Infrastructure as Code
 
@@ -158,11 +180,15 @@ Quick check: run `GET /comments` again and confirm the new comment appears near 
 - Jest + Supertest
 - GitHub Actions (CI)
 - Dependabot
+- Go (deployed smokecheck tool)
+- Terraform (fmt/validate scaffold)
 
 ## Project Structure
 - `public/` - website files (HTML/CSS/JS/images)
 - `functions/` - API code (Express app deployed as a Cloud Function)
 - `functions/__tests__/` - Jest + Supertest API route tests
+- `tools/smokecheck-go/` - Go tool for deployed `/api/health` smokecheck
+- `infra/terraform/` - Terraform scaffold (fmt/validate in CI), does not provision resources
 - `.github/workflows/` - CI workflow(s)
 - `.github/dependabot.yml` - dependency update configuration
 - `firebase.json` / `.firebaserc` - Firebase project configuration
@@ -179,6 +205,9 @@ This repository includes a platform-readiness upgrade to improve maintainability
 - Docker-based Functions lint/test workflow (`.github/workflows/docker-functions-ci.yml`)
 - Docker support files for local container validation (`functions/Dockerfile`, `functions/.dockerignore`)
 - Refactor to extract the Express app into `functions/app.js` for easier testing
+- Terraform fmt/validate workflow for `infra/terraform`
+- Go-based deployed smokecheck workflow (manual and scheduled) for `/api/health`
+- Go smokecheck tool under `tools/smokecheck-go/`
 
 ### Local quality checks (from repo root)
 ```bash
@@ -223,10 +252,11 @@ docker run --rm -v "%cd%\functions:/app" -w /app node:22-alpine sh -lc "npm ci &
 
 This Docker workflow is for validation only (local/CI) and does not replace Firebase deployment (`firebase deploy --only hosting,functions`).
 
-### CI checks (GitHub Actions)
-CI runs automatically on:
-- pushes to `main`
-- pull requests
+### CI workflows (GitHub Actions)
+- **Functions CI:** lint + tests on push and pull requests
+- **Docker Functions CI:** lint + tests in container on push and pull requests
+- **Terraform validate:** fmt check + validate for `infra/terraform`
+- **Deployed API Smokecheck (Go):** manual and scheduled runtime check of live `/api/health` endpoint (not run on pull requests)
 
 ### Production safety note
 Changes are developed and tested on a feature branch before production deployment.
