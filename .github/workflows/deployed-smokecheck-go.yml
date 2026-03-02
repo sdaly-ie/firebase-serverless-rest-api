@@ -25,3 +25,12 @@ jobs:
         run: |
           go mod tidy
           go run .
+
+      - name: Notify Slack on smokecheck failure
+        if: failure()
+        uses: slackapi/slack-github-action@v2
+        with:
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+          webhook-type: incoming-webhook        
+          payload: |
+            text: "🚨 Deployed smokecheck FAILED\nRepo: ${{ github.repository }}\nWorkflow: ${{ github.workflow }}\nBranch: ${{ github.ref_name }}\nRun: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
