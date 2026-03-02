@@ -26,9 +26,6 @@ jobs:
           go mod tidy
           go run .
 
-      - name: Intentional fail (temporary test)
-        run: exit 1
-
       - name: Notify Slack on smokecheck failure
         if: failure()
         uses: slackapi/slack-github-action@v2
