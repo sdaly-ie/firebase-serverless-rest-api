@@ -1,6 +1,5 @@
 // Cloud API (Firebase Functions v2, Express REST API & Firestore)
-
-const { setGlobalOptions } = require("firebase-functions");
+const { setGlobalOptions } = require("firebase-functions/v2");
 const { onRequest } = require("firebase-functions/v2/https");
 const logger = require("firebase-functions/logger");
 
