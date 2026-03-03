@@ -7,9 +7,16 @@
 
 A small end-to-end demo of a static site on Firebase Hosting calling a serverless REST API (Cloud Functions v2 + Express) that stores comments in Firestore.
 
-> **For reviewers:** Start with **[v1.3.1 – Review Snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.3.1)** (stable).  
+> **For reviewers:** Start with **[v1.4.0 – Review Snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.4.0)** (stable).  
 > The `main` branch may include ongoing updates.  
 > Initial snapshot: **v1.0.0**.
+
+**What’s new in v1.4.0**
+- Added CodeQL code scanning (Security → Code scanning alerts)
+- Added Dependency Review on pull requests (supply-chain hygiene)
+- Added SECURITY.md (reporting guidance) and updated core Firebase deps
+- Verified Firebase Emulator Suite locally (Functions + Firestore + Hosting + Emulator UI) using `firebase.json`
+- Verified deployed runtime smokecheck after dependency updates
 
 ---
 
@@ -100,6 +107,8 @@ firebase emulators:start
 ```
 
 This runs the Firebase Emulator Suite locally (Functions + Firestore + Hosting + Emulator UI) using the emulator settings in `firebase.json`.
+
+Verified locally on v1.4.0 using Firebase CLI (`firebase-tools`) v15.8.0.
 
 **If emulators fail to start:** update Firebase CLI to the latest version.
 
