@@ -7,7 +7,7 @@
 
 A small end-to-end demo of a static site on Firebase Hosting calling a serverless REST API (Cloud Functions v2 + Express) that stores comments in Firestore.
 
-> **For reviewers:** Start with **[v1.3.0 – Review Snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.3.0)** (stable).  
+> **For reviewers:** Start with **[v1.3.1 – Review Snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.3.1)** (stable).  
 > The `main` branch may include ongoing updates.  
 > Initial snapshot: **v1.0.0**.
 
@@ -15,11 +15,12 @@ A small end-to-end demo of a static site on Firebase Hosting calling a serverles
 
 ## Reviewer quick tour (2–3 minutes)
 
-1) Open the Live demo, submit a comment and confirm it appears in the list and is retained (demonstrating end-to-end UI -> API -> Firestore -> UI).
-2) Hit the **API health check** endpoint (below) and confirm you receive `200 OK`.  
+1) Open the Live demo, submit a comment, and confirm it appears in the list and is retained (demonstrating end-to-end UI -> API -> Firestore -> UI).
+2) Hit the **API health check** endpoint (below) and confirm you receive `200 OK`.
 3) Open **GitHub Actions → Deployed API Smokecheck (Go)** to see automated runtime verification of the deployed endpoint:  
-   - Workflow: https://github.com/sdaly-ie/firebase-serverless-rest-api/actions/workflows/deployed-smokecheck-go.yml  
-4) Review `functions/` for API implementation and tests, then `tools/smokecheck-go/` for the Go runtime check.
+   - Workflow: https://github.com/sdaly-ie/firebase-serverless-rest-api/actions/workflows/deployed-smokecheck-go.yml
+4) Expand the **Evidence** section below to view screenshots of the GitHub Actions run and the Slack alert.
+5) Review `functions/` for API implementation and tests, then `tools/smokecheck-go/` for the Go runtime check.
 
 ---
 
@@ -38,13 +39,15 @@ A small end-to-end demo of a static site on Firebase Hosting calling a serverles
 ## Automation / Ops
 
 - **Runtime verification:** a scheduled and manual **Go smokecheck** validates the live `/api/health` endpoint (not just unit tests).
-- **Failure visibility:** on smokecheck failure, a **Slack alert** posts to `#ci-alerts` (failure-only. no success spam).
+- **Failure visibility:** on smokecheck failure, a **Slack alert** posts to `#ci-alerts` (failure-only, no success spam).
 - **CI quality gates:** lint + tests run on pushes and pull requests for `functions/`.
 
 ### Evidence
 
+> Evidence screenshots are collapsed by default. Expand the section below to view them.
+
 <details>
-<summary>View runtime verification and Slack alert evidence</summary>
+<summary><strong>View runtime verification and Slack alert evidence</strong></summary>
 
 **GitHub Actions: deployed smokecheck run**  
 ![GitHub Actions deployed smokecheck run](public/images/ops-actions-smokecheck.jpg)
@@ -65,6 +68,7 @@ A small end-to-end demo of a static site on Firebase Hosting calling a serverles
 - GitHub Actions CI (lint + tests), plus Docker-based CI for container parity
 - Terraform scaffold with `fmt`/`validate` checks in CI
 - Deployed runtime smokecheck in GitHub Actions (Go) against `/api/health`
+- Failure-only Slack alerting for deployed smokecheck failures (Incoming Webhook)
 
 ---
 
@@ -78,11 +82,13 @@ Dev validation and deployed runtime check overview:
 
 ![Dev pipeline and ops checks](public/images/dev-pipeline-ops.jpg)
 
+> Ops note: on smokecheck failure, GitHub Actions posts a Slack alert to `#ci-alerts`.
+
 ---
 
 ## Quick start (local)
 
-**Prerequisites:** Node.js + Firebase CLI
+**Prerequisites:** Node.js + Firebase CLI (`firebase-tools`)
 
 ```bash
 cd functions
@@ -90,7 +96,16 @@ npm ci
 npm run lint
 npm test
 cd ..
-firebase emulators:start --only functions,firestore,hosting
+firebase emulators:start
+```
+
+This runs the Firebase Emulator Suite locally (Functions + Firestore + Hosting + Emulator UI) using the emulator settings in `firebase.json`.
+
+**If emulators fail to start:** update Firebase CLI to the latest version.
+
+```bash
+npm install -g firebase-tools@latest
+firebase --version
 ```
 
 ---
@@ -237,6 +252,7 @@ It does **not** provision cloud resources and does **not** manage Firebase or GC
 - HTML / CSS / JavaScript
 
 ## Tooling & Ops
+
 - GitHub Actions (CI + scheduled smokechecks)
 - Slack (failure alerts via Incoming Webhook)
 - Jest + Supertest
@@ -261,4 +277,3 @@ firebase deploy --only hosting,functions
 To practice building, validating and deploying a small end-to-end cloud application (UI, REST API, database, Firebase Hosting/Cloud Functions).
 
 Also to demonstrate production-minded practices: CI lint/tests, container parity checks, Terraform validation and deployed runtime smokechecks with failure-only Slack alerting.
-
