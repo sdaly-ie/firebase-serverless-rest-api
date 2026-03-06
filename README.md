@@ -7,9 +7,29 @@
 
 A small end-to-end demo of a static site on Firebase Hosting calling a serverless REST API (Cloud Functions v2 + Express) that stores comments in Firestore.
 
-> **For reviewers:** Start with **[v1.4.0 – Review Snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.4.0)** (stable).  
+## Quality gates and automation checks
+
+This repo includes automated verification that the deployed API is healthy and functioning as expected:
+
+- **Deployed API smokecheck (Go)**: runs against the live `/api/health` endpoint as a post-deploy signal.
+- **TypeScript API automation (Playwright)**: deployed-endpoint checks in `automation-tests-ts/` covering:
+  - `GET /health` (API availability)
+  - `POST /comments` + verification via `GET /comments`
+  - negative/validation cases
+
+These checks are lightweight, CI-friendly quality signals that demonstrate automation, reliability and delivery discipline.
+
+> **For reviewers:** Start with **[v1.5.0 – Review Snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.5.0)** (stable).  
 > The `main` branch may include ongoing updates.  
 > Initial snapshot: **v1.0.0**.
+
+**What’s new in v1.5.0**
+- Added TypeScript deployed API automation tests (Playwright) in `automation-tests-ts/`:
+  - `GET /health`
+  - `POST /comments` + verification via `GET /comments`
+  - negative/validation cases
+- Documented automation quality gates and how to run the tests in this README
+- Tidied Playwright local artifacts via `.gitignore` (removed tracked `test-results/`)
 
 **What’s new in v1.4.0**
 - Added CodeQL code scanning (Security → Code scanning alerts)
@@ -28,6 +48,7 @@ A small end-to-end demo of a static site on Firebase Hosting calling a serverles
    - Workflow: https://github.com/sdaly-ie/firebase-serverless-rest-api/actions/workflows/deployed-smokecheck-go.yml
 4) Expand the **Evidence** section below to view screenshots of the GitHub Actions run and the Slack alert.
 5) Review `functions/` for API implementation and tests, then `tools/smokecheck-go/` for the Go runtime check.
+6) Review `automation-tests-ts/` for TypeScript API automation checks against the deployed endpoint.
 
 ---
 
@@ -75,6 +96,8 @@ A small end-to-end demo of a static site on Firebase Hosting calling a serverles
 - GitHub Actions CI (lint + tests), plus Docker-based CI for container parity
 - Terraform scaffold with `fmt`/`validate` checks in CI
 - Deployed runtime smokecheck in GitHub Actions (Go) against `/api/health`
+- TypeScript deployed API automation checks (Playwright) against the live endpoint (health, comments, negative cases)
+- CodeQL code scanning + Dependency Review, with Dependabot updates
 - Failure-only Slack alerting for deployed smokecheck failures (Incoming Webhook)
 
 ---
@@ -108,13 +131,39 @@ firebase emulators:start
 
 This runs the Firebase Emulator Suite locally (Functions + Firestore + Hosting + Emulator UI) using the emulator settings in `firebase.json`.
 
-Verified locally on v1.4.0 using Firebase CLI (`firebase-tools`) v15.8.0.
+Verified locally on v1.4.0 using Firebase CLI (`firebase-tools`) v15.8.0 (emulator setup unchanged in v1.5.0).
 
 **If emulators fail to start:** update Firebase CLI to the latest version.
 
 ```bash
 npm install -g firebase-tools@latest
 firebase --version
+```
+
+## Run the deployed API automation tests (TypeScript)
+
+Prerequisites:
+- Node.js 18+
+- A deployed API base URL (example below)
+
+Note: `DEPLOYED_BASE_URL` points to a public demo endpoint used only for automated read/write checks.
+
+From the repo root:
+
+### PowerShell (Windows)
+```powershell
+cd automation-tests-ts
+npm ci
+$env:DEPLOYED_BASE_URL="https://us-central1-assignment4-54794.cloudfunctions.net/api"
+npx playwright test
+```
+
+### Bash (macOS/Linux)
+```bash
+cd automation-tests-ts
+npm ci
+export DEPLOYED_BASE_URL="https://us-central1-assignment4-54794.cloudfunctions.net/api"
+npx playwright test
 ```
 
 ---
@@ -124,6 +173,7 @@ firebase --version
 - [`public/`](public/) — website files (HTML/CSS/JS/images)
 - [`functions/`](functions/) — API code (Express app deployed as a Cloud Function)
 - [`functions/__tests__/`](functions/__tests__/) — Jest + Supertest API route tests
+- [`automation-tests-ts/`](automation-tests-ts/) — TypeScript Playwright deployed API automation checks
 - [`tools/smokecheck-go/`](tools/smokecheck-go/) — Go tool for deployed `/api/health` smokecheck
 - [`infra/terraform/`](infra/terraform/) — Terraform scaffold (fmt/validate in CI), does **not** provision resources
 - [`.github/workflows/`](.github/workflows/) — CI + ops workflows
@@ -258,18 +308,20 @@ It does **not** provision cloud resources and does **not** manage Firebase or GC
 - Firebase Hosting
 - Firebase Cloud Functions v2 (Node.js) + Express
 - Firestore
-- HTML / CSS / JavaScript
+- HTML / CSS / JavaScript (minimal UI harness)
 
 ## Tooling & Ops
 
 - GitHub Actions (CI + scheduled smokechecks)
-- Slack (failure alerts via Incoming Webhook)
-- Jest + Supertest
+- Playwright (TypeScript) deployed API automation checks (`automation-tests-ts/`)
+- Jest + Supertest (Functions route tests)
 - ESLint
 - Docker (CI container parity)
 - Go (deployed smokecheck tool)
 - Terraform (fmt/validate scaffold)
-- Dependabot
+- CodeQL code scanning + Dependency Review
+- Dependabot (dependency updates)
+- Slack (failure alerts via Incoming Webhook)
 
 ---
 
@@ -285,4 +337,4 @@ firebase deploy --only hosting,functions
 
 To practice building, validating and deploying a small end-to-end cloud application (UI, REST API, database, Firebase Hosting/Cloud Functions).
 
-Also to demonstrate production-minded practices: CI lint/tests, container parity checks, Terraform validation and deployed runtime smokechecks with failure-only Slack alerting.
+Also to demonstrate production-minded practices: CI lint/tests, container parity checks, Terraform validation, deployed runtime smokechecks, and lightweight deployed-endpoint API automation checks (Playwright) with clear run instructions.
