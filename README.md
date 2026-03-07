@@ -19,9 +19,17 @@ This repo includes automated verification that the deployed API is healthy and f
 
 These checks are lightweight, CI-friendly quality signals that demonstrate automation, reliability and delivery discipline.
 
-> **For reviewers:** Start with **[v1.5.0 – Review Snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.5.0)** (stable).  
+> **For reviewers:** Start with **[v1.6.0 – Review Snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.6.0)** (stable).  
 > The `main` branch may include ongoing updates.  
 > Initial snapshot: **v1.0.0**.
+
+**What’s new in v1.6.0**
+- Added Pact consumer contract tests for:
+  - `GET /health`
+  - `GET /comments`
+  - `POST /comments`
+- Added Pact provider verification against the Express app
+- Updated `Functions CI` to run both app tests and Pact contract tests
 
 **What’s new in v1.5.0**
 - Added TypeScript deployed API automation tests (Playwright) in `automation-tests-ts/`:
@@ -44,7 +52,7 @@ These checks are lightweight, CI-friendly quality signals that demonstrate autom
 
 1) Open the Live demo, submit a comment, and confirm it appears in the list and is retained (demonstrating end-to-end UI -> API -> Firestore -> UI).
 2) Hit the **API health check** endpoint (below) and confirm you receive `200 OK`.
-3) Open **GitHub Actions → Deployed API Smokecheck (Go)** to see automated runtime verification of the deployed endpoint:  
+3) Open **GitHub Actions -> Deployed API Smokecheck (Go)** to see automated runtime verification of the deployed endpoint:  
    - Workflow: https://github.com/sdaly-ie/firebase-serverless-rest-api/actions/workflows/deployed-smokecheck-go.yml
 4) Expand the **Evidence** section below to view screenshots of the GitHub Actions run and the Slack alert.
 5) Review `functions/` for API implementation and tests, then `tools/smokecheck-go/` for the Go runtime check.
