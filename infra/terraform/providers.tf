@@ -1,11 +1,4 @@
-provider "aws" {
-  region = var.aws_region
-
-  default_tags {
-    tags = {
-      Project     = var.project_name
-      Environment = var.env
-      ManagedBy   = "Terraform"
-    }
-  }
+provider "google" {
+  project = var.project_id
+  region  = var.region
 }

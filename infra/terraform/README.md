@@ -1,30 +1,30 @@
-\# Terraform Scaffold
+# Terraform
 
+This folder contains a small Infrastructure as Code (IaC) slice for the Firebase serverless REST API project.
 
+It is responsible for enabling a core set of Google Cloud Platform (GCP) services used by the application platform, including Cloud Functions, Cloud Run-aligned services, Firestore, Cloud Build and Artifact Registry.
 
-This folder is a small Infrastructure as Code (IaC) scaffold to demonstrate:
+## What this Terraform covers
 
-\- Terraform structure, such as versions, providers, variables and outputs
+- Google provider configuration
+- Input variables for project and region
+- Project-level GCP service enablement
+- Terraform formatting and validation in CI
 
-\- CI quality gates like `terraform fmt` \& `terraform validate`
+## What this Terraform does not cover
 
+- Firebase Hosting deployment
+- Cloud Functions code deployment
+- Firestore rules or indexes
+- Secrets or full environment provisioning
 
+Those parts remain outside Terraform for this repo and continue to be managed through the existing Firebase and application workflow.
 
-Note: This scaffold however does not provision AWS resources and does not manage Firebase/GCP.
-
-Instead it exists to demonstrate Terraform/IaC patterns without credentials in CI.
-
-
-
-\## Local commands
+## Local commands
 
 From this folder:
 
-
-
+```bash
 terraform fmt -recursive
-
-terraform init -backend=false
-
+terraform init
 terraform validate
-

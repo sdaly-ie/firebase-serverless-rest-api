@@ -102,7 +102,7 @@ These checks are lightweight, CI-friendly quality signals that demonstrate autom
 - Firestore database used to store and load comments
 - Basic validation and safe display of user input
 - GitHub Actions CI (lint + tests), plus Docker-based CI for container parity
-- Terraform scaffold with `fmt`/`validate` checks in CI
+- Terraform-managed GCP service enablement, with `fmt`/`validate` checks in CI
 - Deployed runtime smokecheck in GitHub Actions (Go) against `/api/health`
 - TypeScript deployed API automation checks (Playwright) against the live endpoint (health, comments, negative cases)
 - Pact contract tests for consumer/provider API compatibility on `GET /health`, `GET /comments` and `POST /comments`
@@ -184,7 +184,7 @@ npx playwright test
 - [`functions/__tests__/`](functions/__tests__/) — Jest + Supertest API route tests
 - [`automation-tests-ts/`](automation-tests-ts/) — TypeScript Playwright deployed API automation checks
 - [`tools/smokecheck-go/`](tools/smokecheck-go/) — Go tool for deployed `/api/health` smokecheck
-- [`infra/terraform/`](infra/terraform/) — Terraform scaffold (fmt/validate in CI), does **not** provision resources
+- [`infra/terraform/`](infra/terraform/) — Terraform for core GCP service enablement (fmt/validate in CI)
 - [`.github/workflows/`](.github/workflows/) — CI + ops workflows
 - [`.github/dependabot.yml`](.github/dependabot.yml) — dependency update configuration
 - `firebase.json` / `.firebaserc` — Firebase project configuration
@@ -307,8 +307,8 @@ Quick check: run `GET /comments` again and confirm the new comment appears near 
 
 ## Terraform and Infrastructure as Code
 
-The `infra/terraform` folder contains a small Terraform scaffold and a GitHub Actions workflow that runs Terraform format checking and validation.  
-It does **not** provision cloud resources and does **not** manage Firebase or GCP. It is included as a first Infrastructure-as-Code iteration.
+The `infra/terraform` folder contains a small Terraform implementation and a GitHub Actions workflow that runs Terraform format checking and validation.
+It currently manages a narrow Infrastructure-as-Code slice by enabling core GCP project services that support the Firebase serverless application, while app deployment and broader Firebase configuration remain outside Terraform.
 
 ---
 
@@ -327,7 +327,7 @@ It does **not** provision cloud resources and does **not** manage Firebase or GC
 - ESLint
 - Docker (CI container parity)
 - Go (deployed smokecheck tool)
-- Terraform (fmt/validate scaffold)
+- Terraform (GCP service enablement + fmt/validate)
 - CodeQL code scanning + Dependency Review
 - Dependabot (dependency updates)
 - Slack (failure alerts via Incoming Webhook)
@@ -346,4 +346,4 @@ firebase deploy --only hosting,functions
 
 To practice building, validating and deploying a small end-to-end cloud application (UI, REST API, database, Firebase Hosting/Cloud Functions).
 
-Also to demonstrate production-minded practices: CI lint/tests, container parity checks, Terraform validation, deployed runtime smokechecks, and lightweight deployed-endpoint API automation checks (Playwright) with clear run instructions.
+Also to demonstrate production-minded practices: CI lint/tests, container parity checks, Terraform-managed GCP service enablement with validation, deployed runtime smokechecks, and lightweight deployed-endpoint API automation checks (Playwright) with clear run instructions.
