@@ -1,17 +1,22 @@
-variable "aws_region" {
-  description = "AWS region used for Terraform init and validate scaffold."
+variable "project_id" {
+  description = "Google Cloud project ID used for service enablement."
   type        = string
-  default     = "eu-west-1"
+}
+
+variable "region" {
+  description = "Primary Google Cloud region for Functions/Run-aligned services."
+  type        = string
+  default     = "europe-west1"
 }
 
 variable "project_name" {
-  description = "Used for tagging and naming in the scaffold."
+  description = "Project label used for documentation/output clarity."
   type        = string
   default     = "firebase-serverless-rest-api"
 }
 
 variable "env" {
-  description = "Environment tag for the scaffold."
+  description = "Environment label for this Terraform slice."
   type        = string
   default     = "demo"
 }
