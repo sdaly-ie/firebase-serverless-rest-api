@@ -2,7 +2,7 @@ name: Functions CI
 
 on:
   push:
-    branches: ["main", "feature/platform-readiness", "feature/pact-contract-tests"]
+    branches: ["main", "feature/platform-readiness"]
   pull_request:
 
 jobs:
