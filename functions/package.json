@@ -8,7 +8,10 @@
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log",
     "lint": "eslint .",
-    "test": "jest --runInBand"
+    "test": "jest --runInBand __tests__",
+    "test:pact:consumer": "jest --runInBand --runTestsByPath pact/consumer.pact.test.js",
+    "test:pact:provider": "jest --runInBand --runTestsByPath pact/provider.pact.test.js",
+    "test:pact": "npm run test:pact:consumer && npm run test:pact:provider"
   },
   "engines": {
     "node": "22"
@@ -21,6 +24,7 @@
     "firebase-functions": "^7.0.6"
   },
   "devDependencies": {
+    "@pact-foundation/pact": "^16.2.0",
     "eslint": "^10.0.2",
     "firebase-functions-test": "^3.1.0",
     "jest": "^30.2.0",
