@@ -11,7 +11,7 @@ A small end-to-end demo of a static site on Firebase Hosting calling a serverles
 
 This repo includes automated verification that the deployed API is healthy and functioning as expected:
 
-- **Deployed API smokecheck (Go)**: runs against the live `/api/health` endpoint as a post-deploy signal.
+- **Deployed API smokecheck (Go)**: runs against the live `/api/health` endpoint as a post-deploy signal, with `gofmt`, `go vet`, and `go test` enforced in the workflow.
 - **TypeScript API automation (Playwright)**: deployed-endpoint checks in `automation-tests-ts/` covering:
   - `GET /health` (API availability)
   - `POST /comments` + verification via `GET /comments`
@@ -19,9 +19,17 @@ This repo includes automated verification that the deployed API is healthy and f
 
 These checks are lightweight, CI-friendly quality signals that demonstrate automation, reliability and delivery discipline.
 
-> **For reviewers:** Start with **[v1.6.0 – Review Snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.6.0)** (stable).  
-> The `main` branch may include ongoing updates.  
+> **For reviewers:** Start with **[v1.7.0 – Review Snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.7.0)** (stable).
+> The `main` branch may include ongoing updates.
 > Initial snapshot: **v1.0.0**.
+
+**What’s new in v1.7.0**
+- Refactored the Go deployed smokecheck into testable logic and added unit tests
+- Added Go quality gates to the smokecheck workflow: `gofmt`, `go vet`, and `go test`
+- Upgraded the Go smokecheck toolchain from Go 1.22 to Go 1.26.0
+- Replaced permissive CORS with an allowlist-based configuration for deployed and local front ends
+- Updated `functions` dependencies including `firebase-functions` and `eslint`
+- Synced the README so the latest review snapshot points to `v1.7.0`
 
 **What’s new in v1.6.0**
 - Added Pact consumer contract tests for:
@@ -75,6 +83,7 @@ These checks are lightweight, CI-friendly quality signals that demonstrate autom
 ## Automation / Ops
 
 - **Runtime verification:** a scheduled and manual **Go smokecheck** validates the live `/api/health` endpoint (not just unit tests).
+- **Go workflow quality gates:** the smokecheck workflow also runs `gofmt`, `go vet`, and `go test` before executing the deployed runtime check.
 - **Failure visibility:** on smokecheck failure, a **Slack alert** posts to `#ci-alerts` (failure-only, no success spam).
 - **CI quality gates:** lint + tests run on pushes and pull requests for `functions/`.
 
@@ -104,10 +113,12 @@ These checks are lightweight, CI-friendly quality signals that demonstrate autom
 - GitHub Actions CI (lint + tests), plus Docker-based CI for container parity
 - Terraform-managed GCP service enablement, with `fmt`/`validate` checks in CI
 - Deployed runtime smokecheck in GitHub Actions (Go) against `/api/health`
+- Go quality gates for the smokecheck (`gofmt`, `go vet`, `go test`)
 - TypeScript deployed API automation checks (Playwright) against the live endpoint (health, comments, negative cases)
 - Pact contract tests for consumer/provider API compatibility on `GET /health`, `GET /comments` and `POST /comments`
 - CodeQL code scanning + Dependency Review, with Dependabot updates
 - Failure-only Slack alerting for deployed smokecheck failures (Incoming Webhook)
+- Security-conscious CORS allowlist for deployed and local front ends
 
 ---
 
@@ -196,10 +207,9 @@ npx playwright test
 - **Functions CI:** lint + tests on push and pull requests
 - **Docker Functions CI:** lint + tests in a container (push and pull requests)
 - **Terraform (fmt & validate):** formatting check + validation for `infra/terraform`
-- **Deployed API Smokecheck (Go):** manual and scheduled runtime check of live `/api/health` (not run on pull requests)
+- **Deployed API Smokecheck (Go):** manual and scheduled runtime check of live `/api/health`, with `gofmt`, `go vet`, and `go test` enforced in the workflow (not run on pull requests)
 
 ### Required GitHub Actions secrets
-
 These are stored in **Repo -> Settings -> Secrets and variables -> Actions**.
 
 - `DEPLOYED_HEALTH_URL` — deployed `/api/health` endpoint URL
@@ -301,6 +311,7 @@ Quick check: run `GET /comments` again and confirm the new comment appears near 
 - Requires both `handle` and `text`
 - Blocks the handle `hacker` (validated on the website and again on the API)
 - Displays comments as **text**, not rendered HTML/JavaScript (helps prevent script injection)
+- Restricts cross-origin requests to approved deployed and local front-end origins
 - Limits the function to 1 instance (`maxInstances: 1`) to control cost and keep debugging simple
 
 ---

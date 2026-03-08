@@ -13,36 +13,47 @@ type HealthResp struct {
 	OK bool `json:"ok"`
 }
 
-func main() {
-	url := os.Getenv("DEPLOYED_HEALTH_URL")
+func check(url string, client *http.Client) error {
 	if url == "" {
-		fmt.Println("ERROR: DEPLOYED_HEALTH_URL is not set")
-		os.Exit(1)
+		return fmt.Errorf("DEPLOYED_HEALTH_URL is not set")
 	}
 
-	client := &http.Client{Timeout: 10 * time.Second}
 	resp, err := client.Get(url)
 	if err != nil {
-		fmt.Printf("ERROR: request failed: %v\n", err)
-		os.Exit(1)
+		return fmt.Errorf("request failed: %w", err)
 	}
 	defer resp.Body.Close()
 
-	body, _ := io.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return fmt.Errorf("read body failed: %w", err)
+	}
 
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
-		fmt.Printf("ERROR: non-2xx status: %d\nBody: %s\n", resp.StatusCode, string(body))
-		os.Exit(1)
+		return fmt.Errorf("non-2xx status: %d\nBody: %s", resp.StatusCode, string(body))
 	}
 
 	var hr HealthResp
 	if err := json.Unmarshal(body, &hr); err != nil {
-		fmt.Printf("ERROR: invalid JSON: %v\nBody: %s\n", err, string(body))
-		os.Exit(1)
+		return fmt.Errorf("invalid JSON: %w\nBody: %s", err, string(body))
 	}
 
 	if !hr.OK {
-		fmt.Printf("ERROR: ok=false\nBody: %s\n", string(body))
+		return fmt.Errorf("ok=false\nBody: %s", string(body))
+	}
+
+	return nil
+}
+
+func main() {
+	url := os.Getenv("DEPLOYED_HEALTH_URL")
+
+	client := &http.Client{
+		Timeout: 10 * time.Second,
+	}
+
+	if err := check(url, client); err != nil {
+		fmt.Printf("ERROR: %v\n", err)
 		os.Exit(1)
 	}
 

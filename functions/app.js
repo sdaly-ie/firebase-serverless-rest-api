@@ -1,10 +1,38 @@
 const express = require("express");
 const cors = require("cors");
 
+function getAllowedOrigins() {
+  const configuredOrigins = (process.env.ALLOWED_ORIGINS || "")
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+
+  return new Set([
+    "https://assignment4-54794.web.app",
+    "http://localhost:5000",
+    "http://127.0.0.1:5000",
+    ...configuredOrigins,
+  ]);
+}
+
+function createCorsOptions() {
+  const allowedOrigins = getAllowedOrigins();
+
+  return {
+    origin(origin, callback) {
+      if (!origin || allowedOrigins.has(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("Not allowed by CORS"));
+    },
+  };
+}
+
 function createApp({ db, admin, logger }) {
   const app = express();
 
-  app.use(cors({ origin: true }));
+  app.use(cors(createCorsOptions()));
   app.use(express.json());
 
   // GET - API root (prevents "Cannot GET /" when opening the base URL in a browser)
