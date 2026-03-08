@@ -8,6 +8,7 @@ on:
 jobs:
   smokecheck:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -15,8 +16,21 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v6
         with:
-          go-version: "1.22"
+          go-version: "1.26.0"
           cache-dependency-path: tools/smokecheck-go/go.mod
+
+      - name: Go format check
+        working-directory: tools/smokecheck-go
+        run: |
+          test -z "$(gofmt -l .)"
+
+      - name: Go vet
+        working-directory: tools/smokecheck-go
+        run: go vet ./...
+
+      - name: Go test
+        working-directory: tools/smokecheck-go
+        run: go test ./...
 
       - name: Run smokecheck
         working-directory: tools/smokecheck-go
@@ -31,6 +45,11 @@ jobs:
         uses: slackapi/slack-github-action@v2
         with:
           webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
-          webhook-type: incoming-webhook        
+          webhook-type: incoming-webhook
           payload: |
-            text: "🚨 Deployed smokecheck FAILED\nRepo: ${{ github.repository }}\nWorkflow: ${{ github.workflow }}\nBranch: ${{ github.ref_name }}\nRun: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            text: |
+              🚨 Deployed smokecheck FAILED
+              Repo: ${{ github.repository }}
+              Workflow: ${{ github.workflow }}
+              Branch: ${{ github.ref_name }}
+              Run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
