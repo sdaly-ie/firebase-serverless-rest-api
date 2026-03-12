@@ -19,9 +19,17 @@ This repo includes automated verification that the deployed API is healthy and f
 
 These checks are lightweight, CI-friendly quality signals that demonstrate automation, reliability and delivery discipline.
 
-> **For reviewers:** Start with **[v1.7.0 – Review Snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.7.0)** (stable).
+> **For reviewers:** Start with **[v1.8.0 – Review Snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.8.0)** (stable).
 > The `main` branch may include ongoing updates.
 > Initial snapshot: **v1.0.0**.
+
+## What's new in v1.8.0
+- Added an OpenAPI 3.0 specification for the deployed REST API
+- Added Swagger UI under `public/swagger/` for interactive API documentation
+- Added a Postman collection for reviewer-friendly API checks
+- Added a Postman environment for reusable base URL configuration
+- Added a Newman GitHub Actions workflow for API regression and smoke execution
+- Updated the review snapshot so the latest release target is `v1.8.0`
 
 **What’s new in v1.7.0**
 - Refactored the Go deployed smokecheck into testable logic and added unit tests
@@ -271,6 +279,24 @@ After posting a comment, it appears in the Latest comments list (end-to-end chec
 ![Website after posting a comment](public/images/postcomment.jpg)
 
 ---
+
+## API contract and verification
+
+This repo includes an OpenAPI 3.0 specification and Swagger UI for the deployed API.
+
+### Files
+- OpenAPI spec: `public/openapi/openapi.yaml`
+- Swagger UI: `public/swagger/index.html`
+- Postman collection: `postman/firebase-serverless-rest-api.postman_collection.json`
+- Postman environment: `postman/firebase-serverless-rest-api.postman_environment.json`
+- Newman workflow: `.github/workflows/postman-newman.yml`
+
+### Test layer separation
+- OpenAPI and Swagger: API contract and interactive documentation
+- Postman and Newman: reviewer-friendly API regression and smoke checks
+- Playwright: deployed endpoint automation
+- Pact: consumer and provider contract verification
+- Go smokecheck: lightweight live health verification
 
 ## Testing the API with Postman
 
