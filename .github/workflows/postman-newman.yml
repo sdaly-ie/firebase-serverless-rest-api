@@ -26,4 +26,4 @@ jobs:
       - name: Run Postman collection
         run: |
           newman run postman/firebase-serverless-rest-api.postman_collection.json \
-            --environment postman/firebase-serverless-rest-api.postman_environment.json
+            --env-var "baseUrl=https://us-central1-assignment4-54794.cloudfunctions.net"
