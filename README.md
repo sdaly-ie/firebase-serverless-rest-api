@@ -11,38 +11,37 @@ A small end-to-end demo of a static site on Firebase Hosting calling a serverles
 
 This repo is designed to show more than a basic Firebase demo. It demonstrates a small deployed cloud application with live runtime verification, multiple automated API assurance layers, a narrow but real Infrastructure as Code (IaC) slice, and practical security/dependency hygiene.
 
-> **For reviewers:** Start with **[v1.8.1 – Review Snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.8.1)** (stable).
+> **For reviewers:** Start with **[v1.9.0 – Review Snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.9.0)** (stable).
 > The `main` branch may include ongoing updates.
 > Initial snapshot: **v1.0.0**.
 
 ## Key reviewer links
 
-- **Review snapshot:** https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.8.1
-- **Live demo:** https://assignment4-54794.web.app/
-- **Swagger UI:** https://assignment4-54794.web.app/swagger/
-- **OpenAPI YAML:** https://assignment4-54794.web.app/openapi/openapi.yaml
-- **API health check:** https://us-central1-assignment4-54794.cloudfunctions.net/api/health
-- **Go smokecheck workflow:** https://github.com/sdaly-ie/firebase-serverless-rest-api/actions/workflows/deployed-smokecheck-go.yml
+- **[Review snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.9.0)**
+- **[Live demo](https://assignment4-54794.web.app/)**
+- **[Swagger UI](https://assignment4-54794.web.app/swagger/)**
+- **[OpenAPI YAML](https://assignment4-54794.web.app/openapi/openapi.yaml)**
+- **[API health check](https://us-central1-assignment4-54794.cloudfunctions.net/api/health)**
+- **[Go deployed smokecheck workflow](https://github.com/sdaly-ie/firebase-serverless-rest-api/actions/workflows/deployed-smokecheck-go.yml)**
 
 ## What this repo demonstrates
 
 - A deployed end-to-end Firebase application using Hosting, Cloud Functions v2, and Firestore
 - API documentation and contract visibility through OpenAPI and Swagger UI
-- Multiple automated verification layers including Jest, Pact, Playwright, Newman, and a Go smokecheck
+- Multiple automated verification layers including Jest, Pact, Playwright, Newman, and a Go deployed smokecheck
 - Basic Infrastructure as Code and CI/CD-oriented project hygiene
 - Security-minded practices including CodeQL, Dependency Review, Dependabot, controlled CORS configuration, and failure-only Slack alerts
 
-## What's new in v1.8.1
-
-- Fixed the OpenAPI comment contract so the spec now matches the live API field names: `handle` and `text`
-- Updated OpenAPI examples and schemas to reflect the verified deployed comment payload shape, including `createdAt`
-- Corrected the `POST /comments` OpenAPI success response so it now returns a new `id`
-- Updated the README reviewer journey so reviewers can jump straight to the live Swagger UI and hosted OpenAPI YAML
-- Corrected the Terraform default region from `europe-west1` to `us-central1`
-- Refreshed dependencies with a safe patch update to `firebase-functions` and applied non-breaking `npm audit fix` updates
-- Reviewed the remaining low-severity `@tootallnate/once` transitive advisory and left it unresolved rather than forcing a breaking downgrade of `firebase-admin`
+## What's new in v1.9.0
+- Added Cloud Logging and Cloud Monitoring to the Terraform service set
+- Added TFLint to the Terraform workflow
+- Added Terraform outputs for project ID and region
+- Removed unused Terraform variables
+- Tightened Terraform documentation in both README locations
+- Kept Terraform intentionally narrow in scope
 
 **Previous release highlights**
+- **v1.8.1** — aligned the OpenAPI comment contract, corrected the `POST /comments` response, improved the reviewer path, corrected the Terraform default region, and applied a safe dependency refresh
 - **v1.8.0** — added OpenAPI 3.0, Swagger UI, Postman collection, Postman environment, and a Newman GitHub Actions workflow
 - **v1.7.0** — hardened the Go smokecheck, added unit tests, enforced `gofmt` / `go vet` / `go test`, and tightened CORS with an allowlist
 - **v1.6.1** — replaced the old Terraform placeholder with real GCP service enablement
@@ -86,20 +85,20 @@ This repo is designed to show more than a basic Firebase demo. It demonstrates a
 
 ## Automation / Ops
 
-- **Runtime verification:** a scheduled and manual **Go smokecheck** validates the live `/api/health` endpoint (not just unit tests).
+- **Runtime verification:** a scheduled and manual **Go deployed smokecheck** validates the live `/api/health` endpoint (not just unit tests).
 - **Go workflow quality gates:** the smokecheck workflow also runs `gofmt`, `go vet`, and `go test` before executing the deployed runtime check.
 - **Failure visibility:** on smokecheck failure, a **Slack alert** posts to `#ci-alerts` (failure-only, no success spam).
 - **CI quality gates:** lint + tests run on pushes and pull requests for `functions/`.
 
 ### Evidence
 
-Below are screenshots of the live smokecheck workflow and the failure-only Slack alert.
+Screenshots of the live smokecheck workflow and failure-only Slack alert.
 
-**GitHub Actions: deployed smokecheck run**  
-![GitHub Actions deployed smokecheck run](public/images/ops-actions-smokecheck.jpg)
+| Live smokecheck run | Slack failure alert |
+| --- | --- |
+| [![GitHub Actions deployed smokecheck run](public/images/ops-actions-smokecheck.jpg)](public/images/ops-actions-smokecheck.jpg) | [![Slack smokecheck failure alert](public/images/ops-slack-alert.jpg)](public/images/ops-slack-alert.jpg) |
 
-**Slack: failure-only alert to `#ci-alerts`**  
-![Slack smokecheck failure alert](public/images/ops-slack-alert.jpg)
+> Click either image to open the full-size version.
 
 ---
 
@@ -200,8 +199,7 @@ These are stored in **Repo -> Settings -> Secrets and variables -> Actions**.
 
 ## REST API
 
-**Base URL:**  
-- https://us-central1-assignment4-54794.cloudfunctions.net/api
+**Base URL:** https://us-central1-assignment4-54794.cloudfunctions.net/api
 
 > If you open the base URL in a browser, you’ll see a small JSON response (`GET /`), which makes manual checks quicker.
 
@@ -271,6 +269,7 @@ This repo includes an OpenAPI 3.0 specification and Swagger UI for the deployed 
 - Pact: consumer and provider contract verification
 - Go smokecheck: lightweight live health verification
 
+
 ## Testing the API with Postman
 
 You can test the API directly (without the website) using Postman.
@@ -305,7 +304,7 @@ Quick check: run `GET /comments` again and confirm the new comment appears near 
 
 ---
 
-## Basic checks and safety
+## Validation and safety checks
 
 - Requires both `handle` and `text`
 - Blocks the handle `hacker` (validated on the website and again on the API)
@@ -342,10 +341,28 @@ Those areas remain outside Terraform in this repo by design.
 
 ## Tech stack
 
+### Application runtime
 - Firebase Hosting
 - Firebase Cloud Functions v2 (Node.js) + Express
 - Firestore
 - HTML / CSS / JavaScript (minimal UI harness)
+
+### API and verification
+- OpenAPI 3.0
+- Swagger UI
+- Jest + Supertest
+- Playwright
+- Pact
+- Postman + Newman
+- Go deployed smokecheck
+
+### Infrastructure and automation
+- Terraform
+- TFLint
+- GitHub Actions
+- Slack failure alerts
+- CodeQL
+- Dependabot
 
 ---
 
@@ -361,4 +378,4 @@ firebase deploy --only hosting,functions
 
 To practice building, validating and deploying a small end-to-end cloud application (UI, REST API, database, Firebase Hosting/Cloud Functions).
 
-Also to demonstrate production-minded practices: CI lint/tests, container parity checks, Terraform-managed GCP service enablement with validation, deployed runtime smokechecks, and lightweight deployed-endpoint API automation checks (Playwright) with clear run instructions.
+Also to demonstrate production-minded practices: CI lint/tests, container-based parity checks, Terraform-managed GCP service enablement with fmt, validate and lint checks, deployed runtime smokechecks, and deployed-endpoint API automation checks (Playwright) with clear run instructions.
