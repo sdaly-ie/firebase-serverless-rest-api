@@ -1,4 +1,4 @@
-name: Terraform (fmt & validate)
+name: Terraform (fmt, validate & lint)
 
 on:
   push:
@@ -27,6 +27,9 @@ jobs:
         with:
           terraform_version: 1.6.6
 
+      - name: Setup TFLint
+        uses: terraform-linters/setup-tflint@v6
+
       - name: Terraform fmt (check)
         run: terraform fmt -check -recursive
 
@@ -35,3 +38,9 @@ jobs:
 
       - name: Terraform validate
         run: terraform validate -no-color
+
+      - name: TFLint init
+        run: tflint --init
+
+      - name: TFLint
+        run: tflint --format compact

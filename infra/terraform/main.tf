@@ -4,6 +4,8 @@ locals {
     "cloudbuild.googleapis.com",
     "cloudfunctions.googleapis.com",
     "firestore.googleapis.com",
+    "logging.googleapis.com",
+    "monitoring.googleapis.com",
     "run.googleapis.com"
   ])
 }

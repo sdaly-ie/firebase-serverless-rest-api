@@ -174,7 +174,7 @@ npx playwright test
 - [`functions/__tests__/`](functions/__tests__/) — Jest + Supertest API route tests
 - [`automation-tests-ts/`](automation-tests-ts/) — TypeScript Playwright deployed API automation checks
 - [`tools/smokecheck-go/`](tools/smokecheck-go/) — Go tool for deployed `/api/health` smokecheck
-- [`infra/terraform/`](infra/terraform/) — Terraform for core GCP service enablement (fmt/validate in CI)
+- [`infra/terraform/`](infra/terraform/) — Terraform for core GCP service enablement (fmt/validate/lint in CI)
 - [`.github/workflows/`](.github/workflows/) — CI + ops workflows
 - [`.github/dependabot.yml`](.github/dependabot.yml) — dependency update configuration
 - `firebase.json` / `.firebaserc` — Firebase project configuration
@@ -185,7 +185,7 @@ npx playwright test
 
 - **Functions CI** — lint + tests on push and pull requests
 - **Docker Functions CI** — lint + tests in a container for parity checks
-- **Terraform (fmt & validate)** — formatting and validation checks for `infra/terraform`
+- **Terraform (fmt, validate & lint)** — formatting, validation and lint checks for `infra/terraform`
 - **Deployed API Smokecheck (Go)** — scheduled and manual live `/api/health` verification, with `gofmt`, `go vet`, and `go test` enforced before the runtime check
 - **Postman Newman** — API regression and smoke execution using the Postman collection and environment
 
@@ -317,8 +317,26 @@ Quick check: run `GET /comments` again and confirm the new comment appears near 
 
 ## Terraform and Infrastructure as Code
 
-The `infra/terraform` folder contains a small Terraform implementation and a GitHub Actions workflow that runs Terraform format checking and validation.
-It currently manages a narrow Infrastructure-as-Code slice by enabling core GCP project services that support the Firebase serverless application, while app deployment and broader Firebase configuration remain outside Terraform.
+The `infra/terraform` folder contains a deliberately narrow Terraform implementation for this repo.
+
+It manages a small project-level Infrastructure as Code (IaC) slice by enabling core GCP services that support the Firebase serverless application, including Artifact Registry, Cloud Build, Cloud Functions, Firestore, Cloud Logging, Cloud Monitoring, and Cloud Run.
+
+A dedicated GitHub Actions workflow checks this Terraform with:
+
+- `terraform fmt -check -recursive`
+- `terraform init -backend=false -input=false`
+- `terraform validate -no-color`
+- `tflint --format compact`
+
+This Terraform does **not** manage:
+
+- Firebase Hosting deployment
+- Cloud Functions code deployment
+- Firestore rules or indexes
+- secrets management
+- full environment provisioning
+
+Those areas remain outside Terraform in this repo by design.
 
 ---
 
