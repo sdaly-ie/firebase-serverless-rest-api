@@ -9,82 +9,78 @@ A small end-to-end demo of a static site on Firebase Hosting calling a serverles
 
 ## Quality gates and automation checks
 
-This repo includes automated verification that the deployed API is healthy and functioning as expected:
+This repo is designed to show more than a basic Firebase demo. It demonstrates a small deployed cloud application with live runtime verification, multiple automated API assurance layers, a narrow but real Infrastructure as Code (IaC) slice, and practical security/dependency hygiene.
 
-- **Deployed API smokecheck (Go)**: runs against the live `/api/health` endpoint as a post-deploy signal, with `gofmt`, `go vet`, and `go test` enforced in the workflow.
-- **TypeScript API automation (Playwright)**: deployed-endpoint checks in `automation-tests-ts/` covering:
-  - `GET /health` (API availability)
-  - `POST /comments` + verification via `GET /comments`
-  - negative/validation cases
-
-These checks are lightweight, CI-friendly quality signals that demonstrate automation, reliability and delivery discipline.
-
-> **For reviewers:** Start with **[v1.8.0 – Review Snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.8.0)** (stable).
+> **For reviewers:** Start with **[v1.8.1 – Review Snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.8.1)** (stable).
 > The `main` branch may include ongoing updates.
 > Initial snapshot: **v1.0.0**.
 
-## What's new in v1.8.0
-- Added an OpenAPI 3.0 specification for the deployed REST API
-- Added Swagger UI under `public/swagger/` for interactive API documentation
-- Added a Postman collection for reviewer-friendly API checks
-- Added a Postman environment for reusable base URL configuration
-- Added a Newman GitHub Actions workflow for API regression and smoke execution
-- Updated the review snapshot so the latest release target is `v1.8.0`
+## Key reviewer links
 
-**What’s new in v1.7.0**
-- Refactored the Go deployed smokecheck into testable logic and added unit tests
-- Added Go quality gates to the smokecheck workflow: `gofmt`, `go vet`, and `go test`
-- Upgraded the Go smokecheck toolchain from Go 1.22 to Go 1.26.0
-- Replaced permissive CORS with an allowlist-based configuration for deployed and local front ends
-- Updated `functions` dependencies including `firebase-functions` and `eslint`
-- Synced the README so the latest review snapshot points to `v1.7.0`
+- **Review snapshot:** https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.8.1
+- **Live demo:** https://assignment4-54794.web.app/
+- **Swagger UI:** https://assignment4-54794.web.app/swagger/
+- **OpenAPI YAML:** https://assignment4-54794.web.app/openapi/openapi.yaml
+- **API health check:** https://us-central1-assignment4-54794.cloudfunctions.net/api/health
+- **Go smokecheck workflow:** https://github.com/sdaly-ie/firebase-serverless-rest-api/actions/workflows/deployed-smokecheck-go.yml
 
-**What’s new in v1.6.0**
-- Added Pact consumer contract tests for:
-  - `GET /health`
-  - `GET /comments`
-  - `POST /comments`
-- Added Pact provider verification against the Express app
-- Updated `Functions CI` to run both app tests and Pact contract tests
+## What this repo demonstrates
 
-**What’s new in v1.5.0**
-- Added TypeScript deployed API automation tests (Playwright) in `automation-tests-ts/`:
-  - `GET /health`
-  - `POST /comments` + verification via `GET /comments`
-  - negative/validation cases
-- Documented automation quality gates and how to run the tests in this README
-- Tidied Playwright local artifacts via `.gitignore` (removed tracked `test-results/`)
+- A deployed end-to-end Firebase application using Hosting, Cloud Functions v2, and Firestore
+- API documentation and contract visibility through OpenAPI and Swagger UI
+- Multiple automated verification layers including Jest, Pact, Playwright, Newman, and a Go smokecheck
+- Basic Infrastructure as Code and CI/CD-oriented project hygiene
+- Security-minded practices including CodeQL, Dependency Review, Dependabot, controlled CORS configuration, and failure-only Slack alerts
 
-**What’s new in v1.4.0**
-- Added CodeQL code scanning (Security → Code scanning alerts)
-- Added Dependency Review on pull requests (supply-chain hygiene)
-- Added SECURITY.md (reporting guidance) and updated core Firebase deps
-- Verified Firebase Emulator Suite locally (Functions + Firestore + Hosting + Emulator UI) using `firebase.json`
-- Verified deployed runtime smokecheck after dependency updates
+## What's new in v1.8.1
+
+- Fixed the OpenAPI comment contract so the spec now matches the live API field names: `handle` and `text`
+- Updated OpenAPI examples and schemas to reflect the verified deployed comment payload shape, including `createdAt`
+- Corrected the `POST /comments` OpenAPI success response so it now returns a new `id`
+- Updated the README reviewer journey so reviewers can jump straight to the live Swagger UI and hosted OpenAPI YAML
+- Corrected the Terraform default region from `europe-west1` to `us-central1`
+- Refreshed dependencies with a safe patch update to `firebase-functions` and applied non-breaking `npm audit fix` updates
+- Reviewed the remaining low-severity `@tootallnate/once` transitive advisory and left it unresolved rather than forcing a breaking downgrade of `firebase-admin`
+
+**Previous release highlights**
+- **v1.8.0** — added OpenAPI 3.0, Swagger UI, Postman collection, Postman environment, and a Newman GitHub Actions workflow
+- **v1.7.0** — hardened the Go smokecheck, added unit tests, enforced `gofmt` / `go vet` / `go test`, and tightened CORS with an allowlist
+- **v1.6.1** — replaced the old Terraform placeholder with real GCP service enablement
+- **v1.6.0** — added Pact consumer and provider contract tests
+- **v1.5.0** — added TypeScript Playwright deployed API automation checks
+- **v1.4.0** — added CodeQL, Dependency Review, `SECURITY.md`, and dependency hygiene updates
+- **v1.3.1** — improved reviewer path, evidence callout, and local quick start
+- **v1.3.0** — strengthened the review snapshot with better reviewer flow and clearer operational evidence
+- **v1.2.0** — added the deployed API smokecheck workflow and architecture/pipeline diagrams
+- **v1.1.1** — fixed review snapshot wording for consistency
+- **v1.1.0** — added the Terraform scaffold with CI format and validation checks
+- **v1.0.0** — created the initial stable review snapshot for the live Firebase Hosting + Cloud Functions + Firestore demo
 
 ---
 
 ## Reviewer quick tour (2–3 minutes)
 
-1) Open the Live demo, submit a comment, and confirm it appears in the list and is retained (demonstrating end-to-end UI -> API -> Firestore -> UI).
-2) Hit the **API health check** endpoint (below) and confirm you receive `200 OK`.
-3) Open **GitHub Actions -> Deployed API Smokecheck (Go)** to see automated runtime verification of the deployed endpoint:  
-   - Workflow: https://github.com/sdaly-ie/firebase-serverless-rest-api/actions/workflows/deployed-smokecheck-go.yml
-4) Expand the **Evidence** section below to view screenshots of the GitHub Actions run and the Slack alert.
-5) Review `functions/` for API implementation and tests, then `tools/smokecheck-go/` for the Go runtime check.
-6) Review `automation-tests-ts/` for TypeScript API automation checks against the deployed endpoint.
+1. Open the **Live demo** and submit a comment to verify the full flow from UI -> API -> Firestore -> UI.
+2. Open **Swagger UI** to inspect the live API contract and try the endpoints interactively.
+3. Open the **Go smokecheck workflow** to see automated runtime verification of the live deployment.
+4. Review the **Evidence** section below for the GitHub Actions smokecheck run and the Slack failure alert.
+5. Open the **OpenAPI YAML** directly if you want the raw contract file used by Swagger UI.
+6. Hit the **API health check** endpoint and confirm you receive `200 OK`.
+7. Review `functions/` for API implementation and tests, then `tools/smokecheck-go/` for the Go runtime check.
+8. Review `automation-tests-ts/` for TypeScript API automation checks against the deployed endpoint.
 
 ---
 
 ## Live demo
 
 - **Website (Firebase Hosting):** https://assignment4-54794.web.app/
-
-> UI note: The front-end is intentionally minimal—designed as a lightweight test harness to demonstrate end-to-end data flow and API operation rather than UI/UX polish.
-
+- **Swagger UI (live):** https://assignment4-54794.web.app/swagger/
+- **OpenAPI YAML (live):** https://assignment4-54794.web.app/openapi/openapi.yaml
 - **API health check:** https://us-central1-assignment4-54794.cloudfunctions.net/api/health
 
-> **Note:** A custom domain is not included because none is currently configured for this project.
+> UI note: The front-end is intentionally minimal and acts as a lightweight test harness to demonstrate end-to-end data flow and API operation rather than UI/UX polish.
+> Docs note: Swagger UI and the hosted OpenAPI YAML are included so reviewers can validate the API quickly without needing to inspect the repo first.
+> Note: A custom domain is not included because none is currently configured for this project.
 
 ---
 
@@ -97,36 +93,13 @@ These checks are lightweight, CI-friendly quality signals that demonstrate autom
 
 ### Evidence
 
-> Evidence screenshots are collapsed by default. Expand the section below to view them.
-
-<details>
-<summary><strong>View runtime verification and Slack alert evidence</strong></summary>
+Below are screenshots of the live smokecheck workflow and the failure-only Slack alert.
 
 **GitHub Actions: deployed smokecheck run**  
 ![GitHub Actions deployed smokecheck run](public/images/ops-actions-smokecheck.jpg)
 
-**Slack: failure-only alert to #ci-alerts**  
+**Slack: failure-only alert to `#ci-alerts`**  
 ![Slack smokecheck failure alert](public/images/ops-slack-alert.jpg)
-
-</details>
-
----
-
-## What this project shows
-
-- Static website (HTML/CSS/JS) deployed with Firebase Hosting
-- Serverless REST API built with Cloud Functions v2 (Node.js) + Express
-- Firestore database used to store and load comments
-- Basic validation and safe display of user input
-- GitHub Actions CI (lint + tests), plus Docker-based CI for container parity
-- Terraform-managed GCP service enablement, with `fmt`/`validate` checks in CI
-- Deployed runtime smokecheck in GitHub Actions (Go) against `/api/health`
-- Go quality gates for the smokecheck (`gofmt`, `go vet`, `go test`)
-- TypeScript deployed API automation checks (Playwright) against the live endpoint (health, comments, negative cases)
-- Pact contract tests for consumer/provider API compatibility on `GET /health`, `GET /comments` and `POST /comments`
-- CodeQL code scanning + Dependency Review, with Dependabot updates
-- Failure-only Slack alerting for deployed smokecheck failures (Incoming Webhook)
-- Security-conscious CORS allowlist for deployed and local front ends
 
 ---
 
@@ -158,8 +131,6 @@ firebase emulators:start
 ```
 
 This runs the Firebase Emulator Suite locally (Functions + Firestore + Hosting + Emulator UI) using the emulator settings in `firebase.json`.
-
-Verified locally on v1.4.0 using Firebase CLI (`firebase-tools`) v15.8.0 (emulator setup unchanged in v1.5.0).
 
 **If emulators fail to start:** update Firebase CLI to the latest version.
 
@@ -212,12 +183,14 @@ npx playwright test
 
 ## CI / Ops workflows (GitHub Actions)
 
-- **Functions CI:** lint + tests on push and pull requests
-- **Docker Functions CI:** lint + tests in a container (push and pull requests)
-- **Terraform (fmt & validate):** formatting check + validation for `infra/terraform`
-- **Deployed API Smokecheck (Go):** manual and scheduled runtime check of live `/api/health`, with `gofmt`, `go vet`, and `go test` enforced in the workflow (not run on pull requests)
+- **Functions CI** — lint + tests on push and pull requests
+- **Docker Functions CI** — lint + tests in a container for parity checks
+- **Terraform (fmt & validate)** — formatting and validation checks for `infra/terraform`
+- **Deployed API Smokecheck (Go)** — scheduled and manual live `/api/health` verification, with `gofmt`, `go vet`, and `go test` enforced before the runtime check
+- **Postman Newman** — API regression and smoke execution using the Postman collection and environment
 
 ### Required GitHub Actions secrets
+
 These are stored in **Repo -> Settings -> Secrets and variables -> Actions**.
 
 - `DEPLOYED_HEALTH_URL` — deployed `/api/health` endpoint URL
@@ -355,19 +328,6 @@ It currently manages a narrow Infrastructure-as-Code slice by enabling core GCP 
 - Firebase Cloud Functions v2 (Node.js) + Express
 - Firestore
 - HTML / CSS / JavaScript (minimal UI harness)
-
-## Tooling & Ops
-
-- GitHub Actions (CI + scheduled smokechecks)
-- Playwright (TypeScript) deployed API automation checks (`automation-tests-ts/`)
-- Jest + Supertest (Functions route tests)
-- ESLint
-- Docker (CI container parity)
-- Go (deployed smokecheck tool)
-- Terraform (GCP service enablement + fmt/validate)
-- CodeQL code scanning + Dependency Review
-- Dependabot (dependency updates)
-- Slack (failure alerts via Incoming Webhook)
 
 ---
 
