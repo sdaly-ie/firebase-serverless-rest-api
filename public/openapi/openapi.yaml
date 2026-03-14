@@ -1,7 +1,7 @@
 openapi: 3.0.3
 info:
   title: Firebase Serverless REST API Demo
-  version: 1.8.0
+  version: 1.8.1
   description: >
     OpenAPI specification for the deployed Firebase Cloud Functions REST API.
 
@@ -56,11 +56,13 @@ paths:
                 exampleList:
                   value:
                     - id: example-id-1
-                      name: Example User
-                      comment: Hello world
+                      handle: "@exampleuser"
+                      text: "Hello world"
+                      createdAt: "2026-02-07T20:20:25.524Z"
                     - id: example-id-2
-                      name: Another User
-                      comment: Second comment
+                      handle: "@anotheruser"
+                      text: "Second comment"
+                      createdAt: "2026-02-07T20:21:10.000Z"
 
     post:
       tags:
@@ -77,8 +79,8 @@ paths:
             examples:
               valid:
                 value:
-                  name: Example User
-                  comment: Hello world
+                  handle: "@trailrunner23"
+                  text: "Great run today!"
       responses:
         '201':
           description: Comment created successfully
@@ -89,7 +91,7 @@ paths:
               examples:
                 created:
                   value:
-                    message: Comment created successfully
+                    id: "generated-comment-id"
         '400':
           description: Validation error
           content:
@@ -118,36 +120,47 @@ components:
 
     Comment:
       type: object
+      required:
+        - id
+        - handle
+        - text
+        - createdAt
       properties:
         id:
           type: string
           example: example-id-1
-        name:
+        handle:
           type: string
-          example: Example User
-        comment:
+          example: "@exampleuser"
+        text:
           type: string
-          example: Hello world
+          example: "Hello world"
+        createdAt:
+          type: string
+          format: date-time
+          example: "2026-02-07T20:20:25.524Z"
 
     CreateCommentRequest:
       type: object
       required:
-        - name
-        - comment
+        - handle
+        - text
       properties:
-        name:
+        handle:
           type: string
-          example: Example User
-        comment:
+          example: "@trailrunner23"
+        text:
           type: string
-          example: Hello world
+          example: "Great run today!"
 
     CreateCommentResponse:
       type: object
+      required:
+        - id
       properties:
-        message:
+        id:
           type: string
-          example: Comment created successfully
+          example: "generated-comment-id"
 
     ErrorResponse:
       type: object

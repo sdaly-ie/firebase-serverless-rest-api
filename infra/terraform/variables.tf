@@ -6,7 +6,7 @@ variable "project_id" {
 variable "region" {
   description = "Primary Google Cloud region for Functions/Run-aligned services."
   type        = string
-  default     = "europe-west1"
+  default     = "us-central1"
 }
 
 variable "project_name" {
