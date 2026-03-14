@@ -3,7 +3,7 @@
 [![Deployed API Smokecheck (Go)](https://github.com/sdaly-ie/firebase-serverless-rest-api/actions/workflows/deployed-smokecheck-go.yml/badge.svg)](https://github.com/sdaly-ie/firebase-serverless-rest-api/actions/workflows/deployed-smokecheck-go.yml)
 [![Functions CI](https://github.com/sdaly-ie/firebase-serverless-rest-api/actions/workflows/functions-ci.yml/badge.svg)](https://github.com/sdaly-ie/firebase-serverless-rest-api/actions/workflows/functions-ci.yml)
 [![Docker Functions CI](https://github.com/sdaly-ie/firebase-serverless-rest-api/actions/workflows/docker-functions-ci.yml/badge.svg)](https://github.com/sdaly-ie/firebase-serverless-rest-api/actions/workflows/docker-functions-ci.yml)
-[![Terraform (fmt & validate)](https://github.com/sdaly-ie/firebase-serverless-rest-api/actions/workflows/terraform-validate.yml/badge.svg)](https://github.com/sdaly-ie/firebase-serverless-rest-api/actions/workflows/terraform-validate.yml)
+[![Terraform (fmt, validate & lint)](https://github.com/sdaly-ie/firebase-serverless-rest-api/actions/workflows/terraform-validate.yml/badge.svg)](https://github.com/sdaly-ie/firebase-serverless-rest-api/actions/workflows/terraform-validate.yml)
 
 A small end-to-end demo of a static site on Firebase Hosting calling a serverless REST API (Cloud Functions v2 + Express) that stores comments in Firestore.
 
