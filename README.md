@@ -11,8 +11,8 @@ A small end-to-end demo of a static site on Firebase Hosting calling a serverles
 
 This repo is designed to show more than a basic Firebase demo. It demonstrates a small deployed cloud application with live runtime verification, multiple automated API assurance layers, a narrow but real Infrastructure as Code (IaC) slice, and practical security/dependency hygiene.
 
-> **For reviewers:** Start with **[v1.9.0 – Review Snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.9.0)** (stable).
-> The `main` branch may include ongoing updates.
+> **For reviewers:** Start with **[v1.9.1 – Review Snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.9.1)** (stable).
+> The `main` branch may include later maintenance or documentation updates.
 > Initial snapshot: **v1.0.0**.
 
 ## Key reviewer links
@@ -32,28 +32,31 @@ This repo is designed to show more than a basic Firebase demo. It demonstrates a
 - Basic Infrastructure as Code and CI/CD-oriented project hygiene
 - Security-minded practices including CodeQL, Dependency Review, Dependabot, controlled CORS configuration, and failure-only Slack alerts
 
-## What's new in v1.9.0
-- Added Cloud Logging and Cloud Monitoring to the Terraform service set
-- Added TFLint to the Terraform workflow
-- Added Terraform outputs for project ID and region
-- Removed unused Terraform variables
-- Tightened Terraform documentation in both README locations
-- Kept Terraform intentionally narrow in scope
+## What's new in v1.9.1
+
+- Cleared open Dependabot security alerts and completed dependency maintenance
+- Merged safe dependency updates in `/functions`
+- Closed superseded workflow update pull requests
+- Refreshed reviewer documentation to match the current repo state
+- Replaced the Dev pipeline and ops checks image with a Mermaid diagram
+- Updated operational evidence image(s), including Slack alert proof where relevant
+- Re-verified the deployed API using the manual Go smokecheck workflow
 
 **Previous release highlights**
-- **v1.8.1** — aligned the OpenAPI comment contract, corrected the `POST /comments` response, improved the reviewer path, corrected the Terraform default region, and applied a safe dependency refresh
-- **v1.8.0** — added OpenAPI 3.0, Swagger UI, Postman collection, Postman environment, and a Newman GitHub Actions workflow
-- **v1.7.0** — hardened the Go smokecheck, added unit tests, enforced `gofmt` / `go vet` / `go test`, and tightened CORS with an allowlist
-- **v1.6.1** — replaced the old Terraform placeholder with real GCP service enablement
-- **v1.6.0** — added Pact consumer and provider contract tests
-- **v1.5.0** — added TypeScript Playwright deployed API automation checks
-- **v1.4.0** — added CodeQL, Dependency Review, `SECURITY.md`, and dependency hygiene updates
-- **v1.3.1** — improved reviewer path, evidence callout, and local quick start
-- **v1.3.0** — strengthened the review snapshot with better reviewer flow and clearer operational evidence
-- **v1.2.0** — added the deployed API smokecheck workflow and architecture/pipeline diagrams
-- **v1.1.1** — fixed review snapshot wording for consistency
-- **v1.1.0** — added the Terraform scaffold with CI format and validation checks
-- **v1.0.0** — created the initial stable review snapshot for the live Firebase Hosting + Cloud Functions + Firestore demo
+- **v1.9.0** — Added Cloud Logging and Cloud Monitoring to the Terraform service set, added TFLint to the Terraform workflow, added Terraform outputs for project ID and region, removed unused Terraform variables, tightened Terraform documentation, and kept Terraform intentionally narrow in scope
+- **v1.8.1** — Aligned the OpenAPI comment contract, corrected the `POST /comments` response, improved the reviewer path, corrected the Terraform default region, and applied a safe dependency refresh
+- **v1.8.0** — Added OpenAPI 3.0, Swagger UI, Postman collection, Postman environment, and a Newman GitHub Actions workflow
+- **v1.7.0** — Hardened the Go smokecheck, added unit tests, enforced `gofmt` / `go vet` / `go test`, and tightened CORS with an allowlist
+- **v1.6.1** — Replaced the old Terraform placeholder with real GCP service enablement
+- **v1.6.0** — Added Pact consumer and provider contract tests
+- **v1.5.0** — Added TypeScript Playwright deployed API automation checks
+- **v1.4.0** — Added CodeQL, Dependency Review, `SECURITY.md`, and dependency hygiene updates
+- **v1.3.1** — Improved reviewer path, evidence callout, and local quick start
+- **v1.3.0** — Strengthened the review snapshot with better reviewer flow and clearer operational evidence
+- **v1.2.0** — Added the deployed API smokecheck workflow and architecture/pipeline diagrams
+- **v1.1.1** — Fixed review snapshot wording for consistency
+- **v1.1.0** — Added the Terraform scaffold with CI format and validation checks
+- **v1.0.0** — Created the initial stable review snapshot for the live Firebase Hosting + Cloud Functions + Firestore demo
 
 ---
 
@@ -110,7 +113,26 @@ High-level deployed flow (Hosting -> Functions API -> Firestore):
 
 Dev validation and deployed runtime check overview:
 
-![Dev pipeline and ops checks](public/images/dev-pipeline-ops.jpg)
+```mermaid
+flowchart TD
+    A[GitHub repo]
+
+    B[Functions CI<br/>lint + tests]
+    C[Docker Functions CI<br/>container parity checks]
+    D[Postman Newman<br/>API regression / smoke]
+    E[Terraform workflow<br/>fmt + validate + lint]
+    F[CodeQL]
+    G[Deployed API Smokecheck Go<br/>manual + scheduled<br/>GET /api/health]
+    H[Slack alert to #ci-alerts<br/>failure only]
+
+    A --> B
+    A --> C
+    A --> D
+    A --> E
+    A --> F
+    A --> G
+    G -->|on failure| H
+```
 
 > Ops note: on smokecheck failure, GitHub Actions posts a Slack alert to `#ci-alerts`.
 
