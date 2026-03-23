@@ -6,7 +6,7 @@ info:
     OpenAPI specification for the deployed Firebase Cloud Functions REST API.
 
 servers:
-  - url: https://us-central1-assignment4-54794.cloudfunctions.net
+  - url: https://firebase.stephendaly.dev
     description: Production
 
 tags:

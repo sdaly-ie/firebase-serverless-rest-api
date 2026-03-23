@@ -9,6 +9,9 @@ function getAllowedOrigins() {
 
   return new Set([
     "https://assignment4-54794.web.app",
+    "https://assignment4-54794.firebaseapp.com",
+    "https://firebase.stephendaly.dev",
+    "https://assignment4-54794--api-routing-test-dogh1spo.web.app",
     "http://localhost:5000",
     "http://127.0.0.1:5000",
     ...configuredOrigins,
@@ -23,20 +26,19 @@ function createCorsOptions() {
       if (!origin || allowedOrigins.has(origin)) {
         return callback(null, true);
       }
-
       return callback(new Error("Not allowed by CORS"));
     },
   };
 }
 
-function createApp({ db, admin, logger }) {
+function createApp({ db, FieldValue, logger }) {
   const app = express();
 
   app.use(cors(createCorsOptions()));
   app.use(express.json());
 
   // GET - API root (prevents "Cannot GET /" when opening the base URL in a browser)
-  app.get("/", (req, res) => {
+  app.get(["/", "/api"], (req, res) => {
     res.status(200).json({
       ok: true,
       message: "Firebase Serverless REST API is running",
@@ -44,12 +46,12 @@ function createApp({ db, admin, logger }) {
   });
 
   // GET - Quick health check
-  app.get("/health", (req, res) => {
+  app.get(["/health", "/api/health"], (req, res) => {
     res.status(200).json({ ok: true, message: "API is running" });
   });
 
   // GET - List comments (newest first)
-  app.get("/comments", async (req, res) => {
+  app.get(["/comments", "/api/comments"], async (req, res) => {
     try {
       const snap = await db
         .collection("comments")
@@ -75,7 +77,7 @@ function createApp({ db, admin, logger }) {
   });
 
   // POST - New comment
-  app.post("/comments", async (req, res) => {
+  app.post(["/comments", "/api/comments"], async (req, res) => {
     try {
       const handle = String(req.body?.handle ?? "").trim();
       const text = String(req.body?.text ?? "").trim();
@@ -87,7 +89,6 @@ function createApp({ db, admin, logger }) {
       // Block hacker handle
       let normalized = handle.toLowerCase();
       if (normalized.startsWith("@")) normalized = normalized.slice(1);
-
       if (normalized === "hacker") {
         return res.status(400).json({ error: "Handle not allowed" });
       }
@@ -95,7 +96,7 @@ function createApp({ db, admin, logger }) {
       const docRef = await db.collection("comments").add({
         handle,
         text,
-        createdAt: admin.firestore.FieldValue.serverTimestamp(),
+        createdAt: FieldValue.serverTimestamp(),
       });
 
       res.status(201).json({ id: docRef.id });

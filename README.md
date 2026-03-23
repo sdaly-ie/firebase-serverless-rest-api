@@ -11,17 +11,17 @@ A small end-to-end demo of a static site on Firebase Hosting calling a serverles
 
 This repo is designed to show more than a basic Firebase demo. It demonstrates a small deployed cloud application with live runtime verification, multiple automated API assurance layers, a narrow but real Infrastructure as Code (IaC) slice, and practical security/dependency hygiene.
 
-> **For reviewers:** Start with **[v1.9.1 – Review Snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.9.1)** (stable).
-> The `main` branch may include later maintenance or documentation updates.
+> **For reviewers:** Start with **[v1.10.0 – Review Snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.10.0)** (stable).
+> The `main` branch may include ongoing updates.
 > Initial snapshot: **v1.0.0**.
 
 ## Key reviewer links
 
-- **[Review snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.9.0)**
-- **[Live demo](https://assignment4-54794.web.app/)**
-- **[Swagger UI](https://assignment4-54794.web.app/swagger/)**
-- **[OpenAPI YAML](https://assignment4-54794.web.app/openapi/openapi.yaml)**
-- **[API health check](https://us-central1-assignment4-54794.cloudfunctions.net/api/health)**
+- **[Review snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.10.0)**
+- **[Live demo](https://firebase.stephendaly.dev/)**
+- **[Swagger UI](https://firebase.stephendaly.dev/swagger/)**
+- **[OpenAPI YAML](https://firebase.stephendaly.dev/openapi/openapi.yaml)**
+- **[API health check](https://firebase.stephendaly.dev/api/health)**
 - **[Go deployed smokecheck workflow](https://github.com/sdaly-ie/firebase-serverless-rest-api/actions/workflows/deployed-smokecheck-go.yml)**
 
 ## What this repo demonstrates
@@ -32,17 +32,18 @@ This repo is designed to show more than a basic Firebase demo. It demonstrates a
 - Basic Infrastructure as Code and CI/CD-oriented project hygiene
 - Security-minded practices including CodeQL, Dependency Review, Dependabot, controlled CORS configuration, and failure-only Slack alerts
 
-## What's new in v1.9.1
+## What's new in v1.10.0
 
-- Cleared open Dependabot security alerts and completed dependency maintenance
-- Merged safe dependency updates in `/functions`
-- Closed superseded workflow update pull requests
-- Refreshed reviewer documentation to match the current repo state
-- Replaced the Dev pipeline and ops checks image with a Mermaid diagram
-- Updated operational evidence image(s), including Slack alert proof where relevant
-- Re-verified the deployed API using the manual Go smokecheck workflow
+- Added a custom-domain reviewer path under `firebase.stephendaly.dev`
+- Added same-host API routing under `/api/*` so the website, Swagger UI, and hosted OpenAPI all align to one public host
+- Switched the front-end comments UI to call the same-host `/api` path instead of the raw `cloudfunctions.net` URL
+- Updated the hosted OpenAPI production server to `https://firebase.stephendaly.dev`
+- Added a front-end `Load more` control so the comments section shows 5 items initially and reveals more on demand
+- Removed placeholder copyright text from the footer
+- Refreshed reviewer links and Postman evidence image references to match the current public path
 
 **Previous release highlights**
+- **v1.9.1** — Cleared open Dependabot security alerts, refreshed reviewer documentation, updated operational evidence, and re-verified the deployed API
 - **v1.9.0** — Added Cloud Logging and Cloud Monitoring to the Terraform service set, added TFLint to the Terraform workflow, added Terraform outputs for project ID and region, removed unused Terraform variables, tightened Terraform documentation, and kept Terraform intentionally narrow in scope
 - **v1.8.1** — Aligned the OpenAPI comment contract, corrected the `POST /comments` response, improved the reviewer path, corrected the Terraform default region, and applied a safe dependency refresh
 - **v1.8.0** — Added OpenAPI 3.0, Swagger UI, Postman collection, Postman environment, and a Newman GitHub Actions workflow
@@ -75,20 +76,21 @@ This repo is designed to show more than a basic Firebase demo. It demonstrates a
 
 ## Live demo
 
-- **Website (Firebase Hosting):** https://assignment4-54794.web.app/
-- **Swagger UI (live):** https://assignment4-54794.web.app/swagger/
-- **OpenAPI YAML (live):** https://assignment4-54794.web.app/openapi/openapi.yaml
-- **API health check:** https://us-central1-assignment4-54794.cloudfunctions.net/api/health
+- **Website (Firebase Hosting):** https://firebase.stephendaly.dev/
+- **Swagger UI (live):** https://firebase.stephendaly.dev/swagger/
+- **OpenAPI YAML (live):** https://firebase.stephendaly.dev/openapi/openapi.yaml
+- **API health check:** https://firebase.stephendaly.dev/api/health
 
 > UI note: The front-end is intentionally minimal and acts as a lightweight test harness to demonstrate end-to-end data flow and API operation rather than UI/UX polish.
+> UI note: The comments section now shows the first 5 comments initially and reveals more with a `Load more` button to keep the page readable.
 > Docs note: Swagger UI and the hosted OpenAPI YAML are included so reviewers can validate the API quickly without needing to inspect the repo first.
-> Note: A custom domain is not included because none is currently configured for this project.
+> Custom domain note: the deployed public reviewer path now uses `firebase.stephendaly.dev`, with the API served under the same host via `/api/*`.
 
 ---
 
 ## Automation / Ops
 
-- **Runtime verification:** a scheduled and manual **Go deployed smokecheck** validates the live `/api/health` endpoint (not just unit tests).
+- **Runtime verification:** a scheduled and manual **Go deployed smokecheck** validates the deployed `/api/health` endpoint (not just unit tests).
 - **Go workflow quality gates:** the smokecheck workflow also runs `gofmt`, `go vet`, and `go test` before executing the deployed runtime check.
 - **Failure visibility:** on smokecheck failure, a **Slack alert** posts to `#ci-alerts` (failure-only, no success spam).
 - **CI quality gates:** lint + tests run on pushes and pull requests for `functions/`.
@@ -174,7 +176,7 @@ From the repo root:
 ```powershell
 cd automation-tests-ts
 npm ci
-$env:DEPLOYED_BASE_URL="https://us-central1-assignment4-54794.cloudfunctions.net/api"
+$env:DEPLOYED_BASE_URL="https://firebase.stephendaly.dev/api"
 npx playwright test
 ```
 
@@ -182,7 +184,7 @@ npx playwright test
 ```bash
 cd automation-tests-ts
 npm ci
-export DEPLOYED_BASE_URL="https://us-central1-assignment4-54794.cloudfunctions.net/api"
+export DEPLOYED_BASE_URL="https://firebase.stephendaly.dev/api"
 npx playwright test
 ```
 
@@ -207,7 +209,7 @@ npx playwright test
 - **Functions CI** — lint + tests on push and pull requests
 - **Docker Functions CI** — lint + tests in a container for parity checks
 - **Terraform (fmt, validate & lint)** — formatting, validation and lint checks for `infra/terraform`
-- **Deployed API Smokecheck (Go)** — scheduled and manual live `/api/health` verification, with `gofmt`, `go vet`, and `go test` enforced before the runtime check
+- **Deployed API Smokecheck (Go)** — scheduled and manual deployed `/api/health` verification, with `gofmt`, `go vet`, and `go test` enforced before the runtime check
 - **Postman Newman** — API regression and smoke execution using the Postman collection and environment
 
 ### Required GitHub Actions secrets
@@ -221,7 +223,7 @@ These are stored in **Repo -> Settings -> Secrets and variables -> Actions**.
 
 ## REST API
 
-**Base URL:** https://us-central1-assignment4-54794.cloudfunctions.net/api
+**Base URL:** https://firebase.stephendaly.dev/api
 
 > If you open the base URL in a browser, you’ll see a small JSON response (`GET /`), which makes manual checks quicker.
 
@@ -298,21 +300,21 @@ You can test the API directly (without the website) using Postman.
 
 ### 1) Health check
 - Method: `GET`
-- URL: `https://us-central1-assignment4-54794.cloudfunctions.net/api/health`
+- URL: `https://firebase.stephendaly.dev/api/health`
 - Expected: `200 OK` with JSON showing the API is running
 
-![Expected result for GET /health](public/images/health.jpg)
+![Expected result for GET /health](public/images/pm-health.jpg)
 
 ### 2) List comments
 - Method: `GET`
-- URL: `https://us-central1-assignment4-54794.cloudfunctions.net/api/comments`
+- URL: `https://firebase.stephendaly.dev/api/comments`
 - Expected: `200 OK` with a JSON list (array) of comments
 
-![Expected result for GET /comments](public/images/getcomment.jpg)
+![Expected result for GET /comments](public/images/pm-getcomment.jpg)
 
 ### 3) Create a comment
 - Method: `POST`
-- URL: `https://us-central1-assignment4-54794.cloudfunctions.net/api/comments`
+- URL: `https://firebase.stephendaly.dev/api/comments`
 - Header: `Content-Type: application/json`
 - Body (raw JSON):
 ```json
@@ -331,7 +333,7 @@ Quick check: run `GET /comments` again and confirm the new comment appears near 
 - Requires both `handle` and `text`
 - Blocks the handle `hacker` (validated on the website and again on the API)
 - Displays comments as **text**, not rendered HTML/JavaScript (helps prevent script injection)
-- Restricts cross-origin requests to approved deployed and local front-end origins
+- Restricts cross-origin requests to approved deployed, preview, and local front-end origins
 - Limits the function to 1 instance (`maxInstances: 1`) to control cost and keep debugging simple
 
 ---

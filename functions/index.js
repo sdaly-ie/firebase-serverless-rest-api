@@ -2,19 +2,19 @@
 const { setGlobalOptions } = require("firebase-functions/v2");
 const { onRequest } = require("firebase-functions/v2/https");
 const logger = require("firebase-functions/logger");
-
-const admin = require("firebase-admin");
+const { initializeApp } = require("firebase-admin/app");
+const { getFirestore, FieldValue } = require("firebase-admin/firestore");
 const { createApp } = require("./app");
 
 // Start Firebase Admin (once)
-admin.initializeApp();
-const db = admin.firestore();
+initializeApp();
+const db = getFirestore();
 
 // Limit to 1 instance for cost & debugging
 setGlobalOptions({ maxInstances: 1 });
 
 // Build Express app (routes/middleware live in app.js)
-const app = createApp({ db, admin, logger });
+const app = createApp({ db, FieldValue, logger });
 
 // Make API available on the web
 exports.api = onRequest(app);
