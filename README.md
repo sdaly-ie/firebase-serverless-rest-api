@@ -17,7 +17,7 @@ This repo is designed to show more than a basic Firebase demo. It demonstrates a
 
 ## Key reviewer links
 
-- **[Review snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.10.0)**
+- **[Review snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.10.1)**
 - **[Live demo](https://firebase.stephendaly.dev/)**
 - **[Swagger UI](https://firebase.stephendaly.dev/swagger/)**
 - **[OpenAPI YAML](https://firebase.stephendaly.dev/openapi/openapi.yaml)**
