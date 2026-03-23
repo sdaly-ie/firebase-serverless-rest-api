@@ -11,18 +11,20 @@ A small end-to-end demo of a static site on Firebase Hosting calling a serverles
 
 This repo is designed to show more than a basic Firebase demo. It demonstrates a small deployed cloud application with live runtime verification, multiple automated API assurance layers, a narrow but real Infrastructure as Code (IaC) slice, and practical security/dependency hygiene.
 
-> **For reviewers:** Start with **[v1.10.0 – Review Snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.10.0)** (stable).
+> **For reviewers:** Start with **[v1.10.1 – Review Snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.10.1)** (stable).
 > The `main` branch may include ongoing updates.
 > Initial snapshot: **v1.0.0**.
 
 ## Key reviewer links
 
-- **[Review snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.10.0)**
+- **[Review snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.10.1)**
 - **[Live demo](https://firebase.stephendaly.dev/)**
 - **[Swagger UI](https://firebase.stephendaly.dev/swagger/)**
 - **[OpenAPI YAML](https://firebase.stephendaly.dev/openapi/openapi.yaml)**
 - **[API health check](https://firebase.stephendaly.dev/api/health)**
 - **[Go deployed smokecheck workflow](https://github.com/sdaly-ie/firebase-serverless-rest-api/actions/workflows/deployed-smokecheck-go.yml)**
+
+> Reviewer tip: GitHub README links open in the same tab. Use Ctrl+click on Windows or Cmd+click on macOS to open reviewer links in a new tab.
 
 ## What this repo demonstrates
 
@@ -32,17 +34,16 @@ This repo is designed to show more than a basic Firebase demo. It demonstrates a
 - Basic Infrastructure as Code and CI/CD-oriented project hygiene
 - Security-minded practices including CodeQL, Dependency Review, Dependabot, controlled CORS configuration, and failure-only Slack alerts
 
-## What's new in v1.10.0
+## What's new in v1.10.1
 
-- Added a custom-domain reviewer path under `firebase.stephendaly.dev`
-- Added same-host API routing under `/api/*` so the website, Swagger UI, and hosted OpenAPI all align to one public host
-- Switched the front-end comments UI to call the same-host `/api` path instead of the raw `cloudfunctions.net` URL
-- Updated the hosted OpenAPI production server to `https://firebase.stephendaly.dev`
-- Added a front-end `Load more` control so the comments section shows 5 items initially and reveals more on demand
-- Removed placeholder copyright text from the footer
-- Refreshed reviewer links and Postman evidence image references to match the current public path
+- Fixed Firebase Hosting rewrites so both `/api` and `/api/*` route to the API function on the custom domain
+- Re-verified the live custom-domain API root and `/api/health` responses
+- Clarified local quick start prerequisites to Node.js 22 for the Functions emulator flow
+- Added a reviewer tip for opening README links in a new tab from GitHub
+- Added a Playwright first-run note for fresh machines where browser binaries may not yet be installed
 
 **Previous release highlights**
+- v1.10.0 — Added a custom-domain reviewer path under `firebase.stephendaly.dev`, added same-host API routing under `/api/*`, switched the front-end comments UI to the same-host `/api` path, updated the hosted OpenAPI production server, added a front-end `Load more` control, removed placeholder copyright text from the footer, and refreshed reviewer links and Postman evidence references
 - **v1.9.1** — Cleared open Dependabot security alerts, refreshed reviewer documentation, updated operational evidence, and re-verified the deployed API
 - **v1.9.0** — Added Cloud Logging and Cloud Monitoring to the Terraform service set, added TFLint to the Terraform workflow, added Terraform outputs for project ID and region, removed unused Terraform variables, tightened Terraform documentation, and kept Terraform intentionally narrow in scope
 - **v1.8.1** — Aligned the OpenAPI comment contract, corrected the `POST /comments` response, improved the reviewer path, corrected the Terraform default region, and applied a safe dependency refresh
@@ -142,7 +143,7 @@ flowchart TD
 
 ## Quick start (local)
 
-**Prerequisites:** Node.js + Firebase CLI (`firebase-tools`)
+**Prerequisites:** Node.js 22 + Firebase CLI (`firebase-tools`)
 
 ```bash
 cd functions
@@ -154,6 +155,10 @@ firebase emulators:start
 ```
 
 This runs the Firebase Emulator Suite locally (Functions + Firestore + Hosting + Emulator UI) using the emulator settings in `firebase.json`.
+
+Local URLs after startup:
+- Hosting: `http://127.0.0.1:5000`
+- Emulator UI: `http://127.0.0.1:4000`
 
 **If emulators fail to start:** update Firebase CLI to the latest version.
 
@@ -168,11 +173,14 @@ Prerequisites:
 - Node.js 18+
 - A deployed API base URL (example below)
 
-Note: `DEPLOYED_BASE_URL` points to a public demo endpoint used only for automated read/write checks.
+Note:
+- `DEPLOYED_BASE_URL` points to a public demo endpoint used only for automated read/write checks.
+- On a fresh machine, if Playwright browsers are missing, run `npx playwright install`.
 
 From the repo root:
 
 ### PowerShell (Windows)
+
 ```powershell
 cd automation-tests-ts
 npm ci
@@ -181,6 +189,7 @@ npx playwright test
 ```
 
 ### Bash (macOS/Linux)
+
 ```bash
 cd automation-tests-ts
 npm ci
