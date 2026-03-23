@@ -18,31 +18,21 @@ function buildMocks() {
     collection: jest.fn(() => collectionMock),
   };
 
-  const admin = {
-    firestore: {
-      FieldValue: {
-        serverTimestamp: jest.fn(() => "SERVER_TIMESTAMP"),
-      },
-    },
+  const FieldValue = {
+    serverTimestamp: jest.fn(() => "SERVER_TIMESTAMP"),
   };
 
   const logger = {
     error: jest.fn(),
   };
 
-  return {
-    db,
-    admin,
-    logger,
-    getMock,
-    addMock,
-  };
+  return { db, FieldValue, logger, getMock, addMock };
 }
 
 describe("Firebase Serverless REST API app", () => {
   test("GET /health returns API health response", async () => {
-    const { db, admin, logger } = buildMocks();
-    const app = createApp({ db, admin, logger });
+    const { db, FieldValue, logger } = buildMocks();
+    const app = createApp({ db, FieldValue, logger });
 
     const res = await request(app).get("/health");
 
@@ -51,8 +41,8 @@ describe("Firebase Serverless REST API app", () => {
   });
 
   test("GET /comments returns mapped comments (newest first as provided by query)", async () => {
-    const { db, admin, logger, getMock } = buildMocks();
-    const app = createApp({ db, admin, logger });
+    const { db, FieldValue, logger, getMock } = buildMocks();
+    const app = createApp({ db, FieldValue, logger });
 
     getMock.mockResolvedValue({
       docs: [
@@ -98,8 +88,8 @@ describe("Firebase Serverless REST API app", () => {
   });
 
   test("POST /comments returns 400 when handle or text is missing", async () => {
-    const { db, admin, logger, addMock } = buildMocks();
-    const app = createApp({ db, admin, logger });
+    const { db, FieldValue, logger, addMock } = buildMocks();
+    const app = createApp({ db, FieldValue, logger });
 
     const res = await request(app)
       .post("/comments")
@@ -111,8 +101,8 @@ describe("Firebase Serverless REST API app", () => {
   });
 
   test("POST /comments blocks hacker handle (including @hacker)", async () => {
-    const { db, admin, logger, addMock } = buildMocks();
-    const app = createApp({ db, admin, logger });
+    const { db, FieldValue, logger, addMock } = buildMocks();
+    const app = createApp({ db, FieldValue, logger });
 
     const res = await request(app)
       .post("/comments")
@@ -124,8 +114,8 @@ describe("Firebase Serverless REST API app", () => {
   });
 
   test("POST /comments creates a new comment and returns id", async () => {
-    const { db, admin, logger, addMock } = buildMocks();
-    const app = createApp({ db, admin, logger });
+    const { db, FieldValue, logger, addMock } = buildMocks();
+    const app = createApp({ db, FieldValue, logger });
 
     addMock.mockResolvedValue({ id: "newComment123" });
 
@@ -135,7 +125,6 @@ describe("Firebase Serverless REST API app", () => {
 
     expect(res.status).toBe(201);
     expect(res.body).toEqual({ id: "newComment123" });
-
     expect(addMock).toHaveBeenCalledTimes(1);
     expect(addMock).toHaveBeenCalledWith({
       handle: "@trailrunner23",
