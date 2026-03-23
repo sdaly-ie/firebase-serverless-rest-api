@@ -24,6 +24,8 @@ This repo is designed to show more than a basic Firebase demo. It demonstrates a
 - **[API health check](https://firebase.stephendaly.dev/api/health)**
 - **[Go deployed smokecheck workflow](https://github.com/sdaly-ie/firebase-serverless-rest-api/actions/workflows/deployed-smokecheck-go.yml)**
 
+> Reviewer tip: GitHub README links open in the same tab. Use Ctrl+click on Windows or Cmd+click on macOS to open reviewer links in a new tab.
+
 ## What this repo demonstrates
 
 - A deployed end-to-end Firebase application using Hosting, Cloud Functions v2, and Firestore
@@ -142,7 +144,7 @@ flowchart TD
 
 ## Quick start (local)
 
-**Prerequisites:** Node.js + Firebase CLI (`firebase-tools`)
+**Prerequisites:** Node.js 22 + Firebase CLI (`firebase-tools`)
 
 ```bash
 cd functions
@@ -154,6 +156,10 @@ firebase emulators:start
 ```
 
 This runs the Firebase Emulator Suite locally (Functions + Firestore + Hosting + Emulator UI) using the emulator settings in `firebase.json`.
+
+Local URLs after startup:
+- Hosting: `http://127.0.0.1:5000`
+- Emulator UI: `http://127.0.0.1:4000`
 
 **If emulators fail to start:** update Firebase CLI to the latest version.
 
@@ -168,11 +174,14 @@ Prerequisites:
 - Node.js 18+
 - A deployed API base URL (example below)
 
-Note: `DEPLOYED_BASE_URL` points to a public demo endpoint used only for automated read/write checks.
+Note:
+- `DEPLOYED_BASE_URL` points to a public demo endpoint used only for automated read/write checks.
+- On a fresh machine, if Playwright browsers are missing, run `npx playwright install`.
 
 From the repo root:
 
 ### PowerShell (Windows)
+
 ```powershell
 cd automation-tests-ts
 npm ci
@@ -181,6 +190,7 @@ npx playwright test
 ```
 
 ### Bash (macOS/Linux)
+
 ```bash
 cd automation-tests-ts
 npm ci
