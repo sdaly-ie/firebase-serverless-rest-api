@@ -1,5 +1,6 @@
 const path = require("path");
 const http = require("http");
+
 const { Verifier } = require("@pact-foundation/pact");
 const { createApp } = require("../app");
 
@@ -57,12 +58,8 @@ function buildDependencies(state) {
         }),
       })),
     },
-    admin: {
-      firestore: {
-        FieldValue: {
-          serverTimestamp: jest.fn(() => "SERVER_TIMESTAMP"),
-        },
-      },
+    FieldValue: {
+      serverTimestamp: jest.fn(() => "SERVER_TIMESTAMP"),
     },
     logger: {
       error: jest.fn(),
@@ -109,7 +106,6 @@ describe("Pact provider verification for FirebaseCommentsApi", () => {
           "provider is healthy": async () => {
             resetState();
           },
-
           "comments exist": async () => {
             resetState();
             providerState.comments = [
@@ -121,7 +117,6 @@ describe("Pact provider verification for FirebaseCommentsApi", () => {
               },
             ];
           },
-
           "comment can be created": async () => {
             resetState();
           },

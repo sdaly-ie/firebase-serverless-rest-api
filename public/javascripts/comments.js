@@ -1,6 +1,10 @@
 // Comments page calls the API
 
-const API_BASE = "https://us-central1-assignment4-54794.cloudfunctions.net/api";
+const API_BASE = "/api";
+const COMMENTS_BATCH_SIZE = 5;
+
+let allComments = [];
+let visibleCommentsCount = COMMENTS_BATCH_SIZE;
 
 async function fetchComments() {
   const res = await fetch(`${API_BASE}/comments`);
@@ -21,34 +25,44 @@ async function postComment(handle, text) {
       const err = await res.json();
       if (err?.error) errMsg = err.error;
     } catch (e) {
-      // Ignores if response isn't JSON
+      // Ignore if response isn't JSON
     }
     throw new Error(errMsg);
   }
 }
 
-function renderComments(comments) {
+function renderComments() {
   const list = document.getElementById("commentList");
+  const loadMoreButton = document.getElementById("loadMoreComments");
+
   list.innerHTML = "";
 
-  comments.forEach((c) => {
+  const visibleComments = allComments.slice(0, visibleCommentsCount);
+
+  visibleComments.forEach((c) => {
     const wrapper = document.createElement("div");
     wrapper.className = "col-12";
-
     wrapper.innerHTML = `
-      <div class="card shadow-sm mb-2">
+      <div class="card shadow-sm">
         <div class="card-body">
-          <p class="mb-1">
+          <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-2">
             <strong>${escapeHtml(c.handle)}</strong>
-            <small class="text-muted ms-2">${c.createdAt ? new Date(c.createdAt).toLocaleString() : ""}</small>
-          </p>
+            <small class="text-muted">
+              ${c.createdAt ? new Date(c.createdAt).toLocaleString() : ""}
+            </small>
+          </div>
           <p class="mb-0">${escapeHtml(c.text)}</p>
         </div>
       </div>
     `;
-
     list.appendChild(wrapper);
   });
+
+  if (allComments.length > visibleCommentsCount) {
+    loadMoreButton.classList.remove("d-none");
+  } else {
+    loadMoreButton.classList.add("d-none");
+  }
 }
 
 // Show the comment as text, not as code
@@ -58,13 +72,13 @@ function escapeHtml(str) {
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
+    .replaceAll("'", "&#39;");
 }
 
 async function refreshComments(errorBox) {
   try {
-    const comments = await fetchComments();
-    renderComments(comments);
+    allComments = await fetchComments();
+    renderComments();
     if (errorBox) errorBox.classList.add("d-none");
   } catch (err) {
     if (errorBox) {
@@ -79,9 +93,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const handleInput = document.getElementById("handle");
   const commentInput = document.getElementById("commentText");
   const errorBox = document.getElementById("commentError");
+  const loadMoreButton = document.getElementById("loadMoreComments");
 
   // Load comments when the page opens
   refreshComments(errorBox);
+
+  loadMoreButton.addEventListener("click", () => {
+    visibleCommentsCount += COMMENTS_BATCH_SIZE;
+    renderComments();
+  });
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -96,9 +116,10 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // Block hacker before sending 
+    // Block hacker before sending
     let normalized = handle.toLowerCase();
     if (normalized.startsWith("@")) normalized = normalized.slice(1);
+
     if (normalized === "hacker") {
       errorBox.textContent = "Sorry, that handle is not allowed.";
       errorBox.classList.remove("d-none");
@@ -108,6 +129,7 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       await postComment(handle, text);
       form.reset();
+      visibleCommentsCount = COMMENTS_BATCH_SIZE;
       await refreshComments(errorBox);
     } catch (err) {
       errorBox.textContent = err.message;
