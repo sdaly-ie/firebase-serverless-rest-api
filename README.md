@@ -11,13 +11,13 @@ A small end-to-end demo of a static site on Firebase Hosting calling a serverles
 
 This repo is designed to show more than a basic Firebase demo. It demonstrates a small deployed cloud application with live runtime verification, multiple automated API assurance layers, a narrow but real Infrastructure as Code (IaC) slice, and practical security/dependency hygiene.
 
-> **For reviewers:** Start with **[v1.10.1 – Review Snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.10.1)** (stable).
+> **For reviewers:** Start with **[v1.10.2 – Review Snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.10.2)** (stable).
 > The `main` branch may include ongoing updates.
 > Initial snapshot: **v1.0.0**.
 
 ## Key reviewer links
 
-- **[Review snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.10.1)**
+- **[Review snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.10.2)**
 - **[Live demo](https://firebase.stephendaly.dev/)**
 - **[Swagger UI](https://firebase.stephendaly.dev/swagger/)**
 - **[OpenAPI YAML](https://firebase.stephendaly.dev/openapi/openapi.yaml)**
@@ -34,16 +34,19 @@ This repo is designed to show more than a basic Firebase demo. It demonstrates a
 - Basic Infrastructure as Code and CI/CD-oriented project hygiene
 - Security-minded practices including CodeQL, Dependency Review, Dependabot, controlled CORS configuration, and failure-only Slack alerts
 
-## What's new in v1.10.1
+## What's new in v1.10.2
 
-- Fixed Firebase Hosting rewrites so both `/api` and `/api/*` route to the API function on the custom domain
-- Re-verified the live custom-domain API root and `/api/health` responses
-- Clarified local quick start prerequisites to Node.js 22 for the Functions emulator flow
-- Added a reviewer tip for opening README links in a new tab from GitHub
-- Added a Playwright first-run note for fresh machines where browser binaries may not yet be installed
-
+- Cleared the open Dependabot security alerts affecting `/functions` dependencies
+- Merged dependency maintenance updates for `path-to-regexp`, `brace-expansion`, and `picomatch`
+- Re-verified that Dependabot vulnerability alerts show 0 open at release time
+- Re-verified that Dependabot malware alerts show 0 open at release time
+- Re-verified that Code scanning alerts show 0 open at release time
+- Re-verified that Secret scanning alerts show 0 open at release time
+- Updated the Postman Newman workflow to use `actions/checkout@v6` and `actions/setup-node@v6`
+  
 **Previous release highlights**
-- v1.10.0 — Added a custom-domain reviewer path under `firebase.stephendaly.dev`, added same-host API routing under `/api/*`, switched the front-end comments UI to the same-host `/api` path, updated the hosted OpenAPI production server, added a front-end `Load more` control, removed placeholder copyright text from the footer, and refreshed reviewer links and Postman evidence references
+- **v1.10.1** — Fixed Firebase Hosting custom-domain rewrites for `/api` and `/api/*`, re-verified the live custom-domain API responses, and refreshed reviewer setup notes for Node.js 22, first-run Playwright, and opening README links in a new tab.
+- **v1.10.0** — Added a custom-domain reviewer path under `firebase.stephendaly.dev`, added same-host API routing under `/api/*`, switched the front-end comments UI to the same-host `/api` path, updated the hosted OpenAPI production server, added a front-end `Load more` control, removed placeholder copyright text from the footer, and refreshed reviewer links and Postman evidence references
 - **v1.9.1** — Cleared open Dependabot security alerts, refreshed reviewer documentation, updated operational evidence, and re-verified the deployed API
 - **v1.9.0** — Added Cloud Logging and Cloud Monitoring to the Terraform service set, added TFLint to the Terraform workflow, added Terraform outputs for project ID and region, removed unused Terraform variables, tightened Terraform documentation, and kept Terraform intentionally narrow in scope
 - **v1.8.1** — Aligned the OpenAPI comment contract, corrected the `POST /comments` response, improved the reviewer path, corrected the Terraform default region, and applied a safe dependency refresh
