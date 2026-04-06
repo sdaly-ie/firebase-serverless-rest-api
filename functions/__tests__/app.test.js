@@ -132,4 +132,29 @@ describe("Firebase Serverless REST API app", () => {
       createdAt: "SERVER_TIMESTAMP",
     });
   });
+
+  test("POST /comments returns 429 after too many submissions", async () => {
+    const { db, FieldValue, logger, addMock } = buildMocks();
+    const app = createApp({ db, FieldValue, logger });
+
+    addMock.mockResolvedValue({ id: "rateLimitTestComment" });
+
+    for (let i = 0; i < 10; i += 1) {
+      const res = await request(app)
+        .post("/comments")
+        .send({ handle: "@tester", text: `Comment ${i + 1}` });
+
+      expect(res.status).toBe(201);
+    }
+
+    const blockedRes = await request(app)
+      .post("/comments")
+      .send({ handle: "@tester", text: "Comment 11" });
+
+    expect(blockedRes.status).toBe(429);
+    expect(blockedRes.body).toEqual({
+      error: "Too many comment submissions. Please try again later.",
+    });
+    expect(addMock).toHaveBeenCalledTimes(10);
+  });
 });
