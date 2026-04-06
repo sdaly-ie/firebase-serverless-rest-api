@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const rateLimit = require("express-rate-limit");
 
 function getAllowedOrigins() {
   const configuredOrigins = (process.env.ALLOWED_ORIGINS || "")
@@ -31,8 +32,25 @@ function createCorsOptions() {
   };
 }
 
+function createCommentRateLimiter() {
+  return rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 10,
+    standardHeaders: true,
+    legacyHeaders: false,
+    handler(req, res) {
+      res.status(429).json({
+        error: "Too many comment submissions. Please try again later.",
+      });
+    },
+  });
+}
+
 function createApp({ db, FieldValue, logger }) {
   const app = express();
+  const commentRateLimiter = createCommentRateLimiter();
+
+  app.set("trust proxy", 1);
 
   app.use(cors(createCorsOptions()));
   app.use(express.json());
@@ -77,7 +95,7 @@ function createApp({ db, FieldValue, logger }) {
   });
 
   // POST - New comment
-  app.post(["/comments", "/api/comments"], async (req, res) => {
+  app.post(["/comments", "/api/comments"], commentRateLimiter, async (req, res) => {
     try {
       const handle = String(req.body?.handle ?? "").trim();
       const text = String(req.body?.text ?? "").trim();
