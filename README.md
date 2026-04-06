@@ -11,13 +11,13 @@ A small end-to-end demo of a static site on Firebase Hosting calling a serverles
 
 This repo is designed to show more than a basic Firebase demo. It demonstrates a small deployed cloud application with live runtime verification, multiple automated API assurance layers, a narrow but real Infrastructure as Code (IaC) slice, and practical security/dependency hygiene.
 
-> **For reviewers:** Start with **[v1.10.2 – Review Snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.10.2)** (stable).
+> **For reviewers:** Start with **[v1.11.0 – Review Snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.11.0)** (stable).
 > The `main` branch may include ongoing updates.
 > Initial snapshot: **v1.0.0**.
 
 ## Key reviewer links
 
-- **[Review snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.10.2)**
+- **[Review snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.11.0)**
 - **[Live demo](https://firebase.stephendaly.dev/)**
 - **[Swagger UI](https://firebase.stephendaly.dev/swagger/)**
 - **[OpenAPI YAML](https://firebase.stephendaly.dev/openapi/openapi.yaml)**
@@ -34,34 +34,34 @@ This repo is designed to show more than a basic Firebase demo. It demonstrates a
 - Basic Infrastructure as Code and CI/CD-oriented project hygiene
 - Security-minded practices including CodeQL, Dependency Review, Dependabot, controlled CORS configuration, and failure-only Slack alerts
 
-## What's new in v1.10.2
+## What's new in v1.11.0
 
-- Cleared the open Dependabot security alerts affecting `/functions` dependencies
-- Merged dependency maintenance updates for `path-to-regexp`, `brace-expansion`, and `picomatch`
-- Re-verified that Dependabot vulnerability alerts show 0 open at release time
-- Re-verified that Dependabot malware alerts show 0 open at release time
-- Re-verified that Code scanning alerts show 0 open at release time
-- Re-verified that Secret scanning alerts show 0 open at release time
-- Updated the Postman Newman workflow to use `actions/checkout@v6` and `actions/setup-node@v6`
-  
+- Added rate limiting to `POST /comments` and `/api/comments` using `express-rate-limit`
+- Added automated test coverage to verify `429 Too Many Requests` after repeated rapid comment submissions
+- Locked down Firestore client access by tracking `firestore.rules` in the repo and deploying deny-all client rules
+- Corrected Firebase project mapping to the live project `assignment4-54794`
+- Merged dependency maintenance updates for `firebase-functions`, `eslint`, and `lodash`
+- Re-verified the live site, comment posting flow, and `/api/health` after the security and runtime hardening changes
+
 **Previous release highlights**
-- **v1.10.1** — Fixed Firebase Hosting custom-domain rewrites for `/api` and `/api/*`, re-verified the live custom-domain API responses, and refreshed reviewer setup notes for Node.js 22, first-run Playwright, and opening README links in a new tab.
-- **v1.10.0** — Added a custom-domain reviewer path under `firebase.stephendaly.dev`, added same-host API routing under `/api/*`, switched the front-end comments UI to the same-host `/api` path, updated the hosted OpenAPI production server, added a front-end `Load more` control, removed placeholder copyright text from the footer, and refreshed reviewer links and Postman evidence references
-- **v1.9.1** — Cleared open Dependabot security alerts, refreshed reviewer documentation, updated operational evidence, and re-verified the deployed API
-- **v1.9.0** — Added Cloud Logging and Cloud Monitoring to the Terraform service set, added TFLint to the Terraform workflow, added Terraform outputs for project ID and region, removed unused Terraform variables, tightened Terraform documentation, and kept Terraform intentionally narrow in scope
-- **v1.8.1** — Aligned the OpenAPI comment contract, corrected the `POST /comments` response, improved the reviewer path, corrected the Terraform default region, and applied a safe dependency refresh
-- **v1.8.0** — Added OpenAPI 3.0, Swagger UI, Postman collection, Postman environment, and a Newman GitHub Actions workflow
-- **v1.7.0** — Hardened the Go smokecheck, added unit tests, enforced `gofmt` / `go vet` / `go test`, and tightened CORS with an allowlist
-- **v1.6.1** — Replaced the old Terraform placeholder with real GCP service enablement
-- **v1.6.0** — Added Pact consumer and provider contract tests
-- **v1.5.0** — Added TypeScript Playwright deployed API automation checks
-- **v1.4.0** — Added CodeQL, Dependency Review, `SECURITY.md`, and dependency hygiene updates
-- **v1.3.1** — Improved reviewer path, evidence callout, and local quick start
-- **v1.3.0** — Strengthened the review snapshot with better reviewer flow and clearer operational evidence
-- **v1.2.0** — Added the deployed API smokecheck workflow and architecture/pipeline diagrams
-- **v1.1.1** — Fixed review snapshot wording for consistency
-- **v1.1.0** — Added the Terraform scaffold with CI format and validation checks
-- **v1.0.0** — Created the initial stable review snapshot for the live Firebase Hosting + Cloud Functions + Firestore demo
+- **v1.10.2** – Cleared the open Dependabot security alerts affecting `/functions` dependencies, merged dependency maintenance updates for `path-to-regexp`, `brace-expansion`, and `picomatch`, re-verified that Dependabot vulnerability alerts show 0 open at release time, re-verified that Dependabot malware alerts show 0 open at release time, re-verified that Code scanning alerts show 0 open at release time, re-verified that Secret scanning alerts show 0 open at release time, and updated the Postman Newman workflow to use `actions/checkout@v6` and `actions/setup-node@v6`.
+- **v1.10.1** – Fixed Firebase Hosting custom-domain rewrites for `/api` and `/api/*`, re-verified the live custom-domain API responses, and refreshed reviewer setup notes for Node.js 22, first-run Playwright, and opening README links in a new tab.
+- **v1.10.0** – Added a custom-domain reviewer path under `firebase.stephendaly.dev`, added same-host API routing under `/api/*`, switched the front-end comments UI to the same-host `/api` path, updated the hosted OpenAPI production server, added a front-end `Load more` control, removed placeholder copyright text from the footer, and refreshed reviewer links and Postman evidence references.
+- **v1.9.1** – Cleared open Dependabot security alerts, refreshed reviewer documentation, updated operational evidence, and re-verified the deployed API.
+- **v1.9.0** – Added Cloud Logging and Cloud Monitoring to the Terraform service set, added TFLint to the Terraform workflow, added Terraform outputs for project ID and region, removed unused Terraform variables, tightened Terraform documentation, and kept Terraform intentionally narrow in scope.
+- **v1.8.1** – Aligned the OpenAPI comment contract, corrected the `POST /comments` response, improved the reviewer path, corrected the Terraform default region, and applied a safe dependency refresh.
+- **v1.8.0** – Added OpenAPI 3.0, Swagger UI, Postman collection, Postman environment, and a Newman GitHub Actions workflow.
+- **v1.7.0** – Hardened the Go smokecheck, added unit tests, enforced `gofmt` / `go vet` / `go test`, and tightened CORS with an allowlist.
+- **v1.6.1** – Replaced the old Terraform placeholder with real GCP service enablement.
+- **v1.6.0** – Added Pact consumer and provider contract tests.
+- **v1.5.0** – Added TypeScript Playwright deployed API automation checks.
+- **v1.4.0** – Added CodeQL, Dependency Review, `SECURITY.md`, and dependency hygiene updates.
+- **v1.3.1** – Improved reviewer path, evidence callout, and local quick start.
+- **v1.3.0** – Strengthened the review snapshot with better reviewer flow and clearer operational evidence.
+- **v1.2.0** – Added the deployed API smokecheck workflow and architecture/pipeline diagrams.
+- **v1.1.1** – Fixed review snapshot wording for consistency.
+- **v1.1.0** – Added the Terraform scaffold with CI format and validation checks.
+- **v1.0.0** – Created the initial stable review snapshot for the live Firebase Hosting + Cloud Functions + Firestore demo.
 
 ---
 
