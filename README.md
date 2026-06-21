@@ -11,13 +11,13 @@ A small end-to-end demo of a static site on Firebase Hosting calling a serverles
 
 This repo is designed to show more than a basic Firebase demo. It demonstrates a small deployed cloud application with live runtime verification, multiple automated API assurance layers, a narrow but real Infrastructure as Code (IaC) slice, and practical security/dependency hygiene.
 
-> **For reviewers:** Start with **[v1.13.0 – Review Snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.13.0)** (stable).
+> **For reviewers:** Start with **[v1.14.0 – Review Snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.14.0)** (stable).
 > The `main` branch may include ongoing updates.
 > Initial snapshot: **v1.0.0**.
 
 ## Key reviewer links
 
-- **[Review snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.13.0)**
+- **[Review snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.14.0)**
 - **[Live demo](https://firebase.stephendaly.dev/)**
 - **[Swagger UI](https://firebase.stephendaly.dev/swagger/)**
 - **[OpenAPI YAML](https://firebase.stephendaly.dev/openapi/openapi.yaml)**
@@ -34,17 +34,23 @@ This repo is designed to show more than a basic Firebase demo. It demonstrates a
 - Basic Infrastructure as Code and CI/CD-oriented project hygiene
 - Security-minded practices including CodeQL, Dependency Review, Dependabot, controlled CORS configuration, and failure-only Slack alerts
 
-## What's new in v1.13.0
+## What's new in v1.14.0
 
-* Completed a broad Dependabot maintenance pass across runtime dependencies, transitive packages, developer tooling, and GitHub Actions security workflow components
-* Updated key production dependencies including `firebase-admin` from 13.8.0 to 13.10.0 and `express-rate-limit` from 8.3.2 to 8.5.2, alongside supporting indirect dependency refreshes for `ip-address`, `fast-xml-parser`, `fast-xml-builder`, `protobufjs`, `@protobufjs/utf8`, and `axios`
-* Updated test and development tooling including `eslint`, `@pact-foundation/pact`, `jest`, and `firebase-functions-test`, and upgraded `actions/dependency-review-action` from v4 to v5
-* Resolved the remaining reported Dependabot vulnerability through the completed upstream dependency refresh, with the repository security dashboard returning to 0 open security and quality items
-* Refreshed the README reviewer path and release summary for `v1.13.0`
+- Strengthened npm supply-chain security by allowing only reviewed package versions to run scripts during dependency installation.
+- Added weekly Dependabot monitoring for the TypeScript Playwright project and pinned Newman to `6.2.2` for consistent CI runs.
+- Updated Playwright from `1.58.2` to `1.61.0` and TypeScript from `5.9.3` to `6.0.3`.
+- Replaced the deprecated Node module-resolution setting with `moduleResolution: "Bundler"` while keeping the existing CommonJS setup.
+- Updated `actions/checkout` from v6 to v7 across the CodeQL, Functions, Docker, Terraform, Newman, and Go smokecheck workflows.
+- Refreshed Functions dependencies, including ESLint `10.5.0`, Express, `qs`, `form-data`, `@grpc/grpc-js`, and `@tootallnate/once`.
+- Fixed the reported `protobufjs` and `@babel/core` security findings by updating to `protobufjs` `7.6.4` and `@babel/core` `7.29.7`.
+- Reviewed and documented the remaining development-only `js-yaml` advisory instead of forcing an unsupported major-version override. The affected YAML parsing path is not used by the deployed API.
+- Re-ran strict dependency installation, ESLint, Jest, Pact, Playwright, Docker, Newman, and GitHub Actions checks.
+- Updated the reviewer links and release summary for `v1.14.0`. No application endpoints, API behaviour, OpenAPI contract, Firestore configuration, or Terraform implementation changed.
 
 <details>
 <summary><strong>Previous release highlights</strong></summary>
 
+- **v1.13.0** – Completed a broad Dependabot maintenance pass across runtime dependencies, transitive packages, developer tooling, and GitHub Actions security components; updated `firebase-admin`, `express-rate-limit`, ESLint, Pact, Jest, and `firebase-functions-test`; upgraded `actions/dependency-review-action` from v4 to v5; cleared the remaining open Dependabot alert; and refreshed the stable reviewer snapshot.
 - **v1.12.0** – Cleared the open Dependabot vulnerability alerts affecting `/functions` dependencies by merging the `axios` and `follow-redirects` updates, merged routine dependency maintenance updates for `firebase-functions` and `firebase-admin`, re-verified that Dependabot vulnerability alerts showed 0 open after the updates, re-verified recent `main` branch GitHub Actions workflow runs passed, and refreshed the README reviewer path and release summary.
 - **v1.11.0** – Added rate limiting to `POST /comments` and `/api/comments` using `express-rate-limit`, added automated test coverage for `429 Too Many Requests`, tracked and deployed deny-all `firestore.rules` for client access, corrected Firebase project mapping to `assignment4-54794`, merged dependency maintenance updates for `firebase-functions`, `eslint`, and `lodash`, and re-verified the live site, comment posting flow, and `/api/health`.
 - **v1.10.2** – Cleared the open Dependabot security alerts affecting `/functions` dependencies, merged dependency maintenance updates for `path-to-regexp`, `brace-expansion`, and `picomatch`, re-verified that Dependabot vulnerability alerts show 0 open at release time, re-verified that Dependabot malware alerts show 0 open at release time, re-verified that Code scanning alerts show 0 open at release time, re-verified that Secret scanning alerts show 0 open at release time, and updated the Postman Newman workflow to use `actions/checkout@v6` and `actions/setup-node@v6`.
@@ -102,6 +108,7 @@ This repo is designed to show more than a basic Firebase demo. It demonstrates a
 - **Runtime verification:** a scheduled and manual **Go deployed smokecheck** validates the deployed `/api/health` endpoint (not just unit tests).
 - **Go workflow quality gates:** the smokecheck workflow also runs `gofmt`, `go vet`, and `go test` before executing the deployed runtime check.
 - **Failure visibility:** on smokecheck failure, a **Slack alert** posts to `#ci-alerts` (failure-only, no success spam).
+- **Controlled dependency installation:** reviewed lifecycle scripts are explicitly approved by package and version, supporting strict npm installation checks and npm v12 readiness.
 - **CI quality gates:** lint + tests run on pushes and pull requests for `functions/`.
 
 ### Evidence
@@ -162,6 +169,10 @@ cd ..
 firebase emulators:start
 ```
 
+> Supply-chain note: both npm projects include explicit, version-pinned lifecycle-script
+> approvals. With a compatible npm version, verify either dependency tree using
+> `npm ci --strict-allow-scripts` from `functions/` or `automation-tests-ts/`.
+
 This runs the Firebase Emulator Suite locally (Functions + Firestore + Hosting + Emulator UI) using the emulator settings in `firebase.json`.
 
 Local URLs after startup:
@@ -178,7 +189,7 @@ firebase --version
 ## Run the deployed API automation tests (TypeScript)
 
 Prerequisites:
-- Node.js 18+
+- Node.js 22 recommended
 - A deployed API base URL (example below)
 
 Note:
@@ -216,7 +227,7 @@ npx playwright test
 - [`tools/smokecheck-go/`](tools/smokecheck-go/) — Go tool for deployed `/api/health` smokecheck
 - [`infra/terraform/`](infra/terraform/) — Terraform for core GCP service enablement (fmt/validate/lint in CI)
 - [`.github/workflows/`](.github/workflows/) — CI + ops workflows
-- [`.github/dependabot.yml`](.github/dependabot.yml) — dependency update configuration
+- [`.github/dependabot.yml`](.github/dependabot.yml) — weekly dependency monitoring for Functions, TypeScript Playwright automation, and GitHub Actions
 - `firebase.json` / `.firebaserc` — Firebase project configuration
 
 ---
