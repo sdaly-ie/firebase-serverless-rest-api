@@ -31,5 +31,11 @@
     "jest": "^30.4.2",
     "supertest": "^7.2.2"
   },
-  "private": true
+  "private": true,
+  "allowScripts": {
+    "@firebase/util@1.13.0": true,
+    "protobufjs@7.5.8": true,
+    "unrs-resolver@1.11.1": true,
+    "fsevents@2.3.3": true
+  }
 }
