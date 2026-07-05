@@ -25,7 +25,7 @@
     "firebase-functions": "^7.2.5"
   },
   "devDependencies": {
-    "@pact-foundation/pact": "^16.4.0",
+    "@pact-foundation/pact": "^17.0.1",
     "eslint": "^10.6.0",
     "firebase-functions-test": "^3.5.0",
     "jest": "^30.4.2",
