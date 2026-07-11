@@ -37,5 +37,10 @@
     "protobufjs@7.6.4": true,
     "unrs-resolver@1.11.1": true,
     "fsevents@2.3.3": true
+  },
+  "overrides": {
+    "@istanbuljs/load-nyc-config": {
+      "js-yaml": "3.15.0"
+    }
   }
 }
