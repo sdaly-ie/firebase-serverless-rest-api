@@ -11,13 +11,13 @@ A small end-to-end demo of a static site on Firebase Hosting calling a serverles
 
 This repo is designed to show more than a basic Firebase demo. It demonstrates a small deployed cloud application with live runtime verification, multiple automated API assurance layers, a narrow but real Infrastructure as Code (IaC) slice, and practical security/dependency hygiene.
 
-> **For reviewers:** Start with **[v1.14.0 – Review Snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.14.0)** (stable).
+> **For reviewers:** Start with **[v1.15.0 – Review Snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.15.0)** (stable).
 > The `main` branch may include ongoing updates.
 > Initial snapshot: **v1.0.0**.
 
 ## Key reviewer links
 
-- **[Review snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.14.0)**
+- **[Review snapshot](https://github.com/sdaly-ie/firebase-serverless-rest-api/releases/tag/v1.15.0)**
 - **[Live demo](https://firebase.stephendaly.dev/)**
 - **[Swagger UI](https://firebase.stephendaly.dev/swagger/)**
 - **[OpenAPI YAML](https://firebase.stephendaly.dev/openapi/openapi.yaml)**
@@ -34,22 +34,19 @@ This repo is designed to show more than a basic Firebase demo. It demonstrates a
 - Basic Infrastructure as Code and CI/CD-oriented project hygiene
 - Security-minded practices including CodeQL, Dependency Review, Dependabot, controlled CORS configuration, and failure-only Slack alerts
 
-## What's new in v1.14.0
+## What's new in v1.15.0
 
-- Strengthened npm supply-chain security by allowing only reviewed package versions to run scripts during dependency installation.
-- Added weekly Dependabot monitoring for the TypeScript Playwright project and pinned Newman to `6.2.2` for consistent CI runs.
-- Updated Playwright from `1.58.2` to `1.61.0` and TypeScript from `5.9.3` to `6.0.3`.
-- Replaced the deprecated Node module-resolution setting with `moduleResolution: "Bundler"` while keeping the existing CommonJS setup.
-- Updated `actions/checkout` from v6 to v7 across the CodeQL, Functions, Docker, Terraform, Newman, and Go smokecheck workflows.
-- Refreshed Functions dependencies, including ESLint `10.5.0`, Express, `qs`, `form-data`, `@grpc/grpc-js`, and `@tootallnate/once`.
-- Fixed the reported `protobufjs` and `@babel/core` security findings by updating to `protobufjs` `7.6.4` and `@babel/core` `7.29.7`.
-- Reviewed and documented the remaining development-only `js-yaml` advisory instead of forcing an unsupported major-version override. The affected YAML parsing path is not used by the deployed API.
-- Re-ran strict dependency installation, ESLint, Jest, Pact, Playwright, Docker, Newman, and GitHub Actions checks.
-- Updated the reviewer links and release summary for `v1.14.0`. No application endpoints, API behaviour, OpenAPI contract, Firestore configuration, or Terraform implementation changed.
+- **Security remediation:** resolved the post-`v1.14.0` Dependabot findings affecting `js-yaml`, `websocket-driver`, `axios`, `body-parser`, `brace-expansion`, and `protobufjs`. The dependency alert page returned to **0 open alerts** after the merged fixes. ([#124](https://github.com/sdaly-ie/firebase-serverless-rest-api/pull/124), [#125](https://github.com/sdaly-ie/firebase-serverless-rest-api/pull/125), [#132](https://github.com/sdaly-ie/firebase-serverless-rest-api/pull/132), [#133](https://github.com/sdaly-ie/firebase-serverless-rest-api/pull/133), [#135](https://github.com/sdaly-ie/firebase-serverless-rest-api/pull/135))
+- **Functions runtime and test tooling:** updated `firebase-functions` to `7.3.0`, `express-rate-limit` to `8.6.1`, Pact to `17.0.1`, and ESLint to `10.7.0`. ([#116](https://github.com/sdaly-ie/firebase-serverless-rest-api/pull/116), [#118](https://github.com/sdaly-ie/firebase-serverless-rest-api/pull/118), [#121](https://github.com/sdaly-ie/firebase-serverless-rest-api/pull/121), [#129](https://github.com/sdaly-ie/firebase-serverless-rest-api/pull/129), [#130](https://github.com/sdaly-ie/firebase-serverless-rest-api/pull/130))
+- **TypeScript API automation:** updated Playwright from `1.61.0` to `1.62.0`, TypeScript from `6.0.3` to `7.0.2`, and `@types/node` from `25.3.3` to `25.9.5`. ([#117](https://github.com/sdaly-ie/firebase-serverless-rest-api/pull/117), [#119](https://github.com/sdaly-ie/firebase-serverless-rest-api/pull/119), [#122](https://github.com/sdaly-ie/firebase-serverless-rest-api/pull/122), [#123](https://github.com/sdaly-ie/firebase-serverless-rest-api/pull/123), [#134](https://github.com/sdaly-ie/firebase-serverless-rest-api/pull/134))
+- **GitHub Actions maintenance:** updated `actions/setup-node` from v6 to v7, `actions/setup-go` from v6 to v7, and `slackapi/slack-github-action` from v3 to v4. ([#126](https://github.com/sdaly-ie/firebase-serverless-rest-api/pull/126), [#127](https://github.com/sdaly-ie/firebase-serverless-rest-api/pull/127), [#128](https://github.com/sdaly-ie/firebase-serverless-rest-api/pull/128))
+- Re-ran dependency installation, ESLint, Jest, Pact, Playwright, Docker, Newman, CodeQL, Dependency Review, and deployed Go smokecheck validation as applicable.
+- Updated the reviewer links and release summary for `v1.15.0`. No application endpoints, API behaviour, OpenAPI contract, Firestore configuration, or Terraform implementation changed.
 
 <details>
 <summary><strong>Previous release highlights</strong></summary>
 
+- **v1.14.0** – Added version-specific npm lifecycle-script approvals and weekly Dependabot coverage for the TypeScript Playwright project; updated Playwright to `1.61.0`, TypeScript to `6.0.3`, `actions/checkout` to v7, and Newman to `6.2.2`; remediated the reported `protobufjs` and `@babel/core` findings; and refreshed the stable reviewer snapshot.
 - **v1.13.0** – Completed a broad Dependabot maintenance pass across runtime dependencies, transitive packages, developer tooling, and GitHub Actions security components; updated `firebase-admin`, `express-rate-limit`, ESLint, Pact, Jest, and `firebase-functions-test`; upgraded `actions/dependency-review-action` from v4 to v5; cleared the remaining open Dependabot alert; and refreshed the stable reviewer snapshot.
 - **v1.12.0** – Cleared the open Dependabot vulnerability alerts affecting `/functions` dependencies by merging the `axios` and `follow-redirects` updates, merged routine dependency maintenance updates for `firebase-functions` and `firebase-admin`, re-verified that Dependabot vulnerability alerts showed 0 open after the updates, re-verified recent `main` branch GitHub Actions workflow runs passed, and refreshed the README reviewer path and release summary.
 - **v1.11.0** – Added rate limiting to `POST /comments` and `/api/comments` using `express-rate-limit`, added automated test coverage for `429 Too Many Requests`, tracked and deployed deny-all `firestore.rules` for client access, corrected Firebase project mapping to `assignment4-54794`, merged dependency maintenance updates for `firebase-functions`, `eslint`, and `lodash`, and re-verified the live site, comment posting flow, and `/api/health`.
@@ -76,7 +73,7 @@ This repo is designed to show more than a basic Firebase demo. It demonstrates a
 
 ---
 
-## Reviewer quick tour (2–3 minutes)
+## Reviewer quick tour (2-3 minutes)
 
 1. Open the **Live demo** and submit a comment to verify the full flow from UI -> API -> Firestore -> UI.
 2. Open **Swagger UI** to inspect the live API contract and try the endpoints interactively.
@@ -91,10 +88,10 @@ This repo is designed to show more than a basic Firebase demo. It demonstrates a
 
 ## Live demo
 
-- **Website (Firebase Hosting):** https://firebase.stephendaly.dev/
-- **Swagger UI (live):** https://firebase.stephendaly.dev/swagger/
-- **OpenAPI YAML (live):** https://firebase.stephendaly.dev/openapi/openapi.yaml
-- **API health check:** https://firebase.stephendaly.dev/api/health
+- **Website (Firebase Hosting):** <https://firebase.stephendaly.dev/>
+- **Swagger UI (live):** <https://firebase.stephendaly.dev/swagger/>
+- **OpenAPI YAML (live):** <https://firebase.stephendaly.dev/openapi/openapi.yaml>
+- **API health check:** <https://firebase.stephendaly.dev/api/health>
 
 > UI note: The front-end is intentionally minimal and acts as a lightweight test harness to demonstrate end-to-end data flow and API operation rather than UI/UX polish.
 > UI note: The comments section now shows the first 5 comments initially and reveals more with a `Load more` button to keep the page readable.
@@ -105,11 +102,13 @@ This repo is designed to show more than a basic Firebase demo. It demonstrates a
 
 ## Automation / Ops
 
-- **Runtime verification:** a scheduled and manual **Go deployed smokecheck** validates the deployed `/api/health` endpoint (not just unit tests).
-- **Go workflow quality gates:** the smokecheck workflow also runs `gofmt`, `go vet`, and `go test` before executing the deployed runtime check.
-- **Failure visibility:** on smokecheck failure, a **Slack alert** posts to `#ci-alerts` (failure-only, no success spam).
-- **Controlled dependency installation:** reviewed lifecycle scripts are explicitly approved by package and version, supporting strict npm installation checks and npm v12 readiness.
-- **CI quality gates:** lint + tests run on pushes and pull requests for `functions/`.
+- **Functions verification:** Node.js 22 CI uses `actions/setup-node@v7` to run clean dependency installation, ESLint, Jest route tests, and Pact consumer/provider contract tests.
+- **Container parity:** Docker CI repeats the Functions lint and Jest tests inside the repository’s Node.js 22 Alpine test image.
+- **Runtime verification:** a daily and manually dispatchable Go 1.26 smokecheck uses `actions/setup-go@v7` to validate the deployed `/api/health` endpoint.
+- **Go workflow quality gates:** the smokecheck runs `gofmt`, `go vet`, and `go test` before executing the deployed runtime check.
+- **API regression:** the Newman workflow uses `actions/setup-node@v7`, Node.js 20, and pinned Newman `6.2.2` to run the Postman collection.
+- **Security gates:** CodeQL scans JavaScript/TypeScript on pushes, pull requests, and a weekly schedule; Dependency Review checks dependency changes on every pull request.
+- **Failure visibility:** on smokecheck failure, a **Slack alert** posts to `#ci-alerts` through `slackapi/slack-github-action@v4` (failure-only, no success spam).
 
 ### Evidence
 
@@ -139,7 +138,7 @@ flowchart TD
     C[Docker Functions CI<br/>container parity checks]
     D[Postman Newman<br/>API regression / smoke]
     E[Terraform workflow<br/>fmt + validate + lint]
-    F[CodeQL]
+    F[CodeQL + Dependency Review<br/>security gates]
     G[Deployed API Smokecheck Go<br/>manual + scheduled<br/>GET /api/health]
     H[Slack alert to #ci-alerts<br/>failure only]
 
@@ -165,6 +164,7 @@ cd functions
 npm ci
 npm run lint
 npm test
+npm run test:pact
 cd ..
 firebase emulators:start
 ```
@@ -176,6 +176,7 @@ firebase emulators:start
 This runs the Firebase Emulator Suite locally (Functions + Firestore + Hosting + Emulator UI) using the emulator settings in `firebase.json`.
 
 Local URLs after startup:
+
 - Hosting: `http://127.0.0.1:5000`
 - Emulator UI: `http://127.0.0.1:4000`
 
@@ -189,10 +190,12 @@ firebase --version
 ## Run the deployed API automation tests (TypeScript)
 
 Prerequisites:
+
 - Node.js 22 recommended
 - A deployed API base URL (example below)
 
 Note:
+
 - `DEPLOYED_BASE_URL` points to a public demo endpoint used only for automated read/write checks.
 - On a fresh machine, if Playwright browsers are missing, run `npx playwright install`.
 
@@ -203,8 +206,10 @@ From the repo root:
 ```powershell
 cd automation-tests-ts
 npm ci
+npx tsc --noEmit
 $env:DEPLOYED_BASE_URL="https://firebase.stephendaly.dev/api"
 npx playwright test
+Remove-Item Env:DEPLOYED_BASE_URL
 ```
 
 ### Bash (macOS/Linux)
@@ -212,8 +217,10 @@ npx playwright test
 ```bash
 cd automation-tests-ts
 npm ci
+npx tsc --noEmit
 export DEPLOYED_BASE_URL="https://firebase.stephendaly.dev/api"
 npx playwright test
+unset DEPLOYED_BASE_URL
 ```
 
 ---
@@ -224,21 +231,28 @@ npx playwright test
 - [`functions/`](functions/) — API code (Express app deployed as a Cloud Function)
 - [`functions/__tests__/`](functions/__tests__/) — Jest + Supertest API route tests
 - [`automation-tests-ts/`](automation-tests-ts/) — TypeScript Playwright deployed API automation checks
+- [`postman/`](postman/) — Postman collection and environment used by the Newman workflow
 - [`tools/smokecheck-go/`](tools/smokecheck-go/) — Go tool for deployed `/api/health` smokecheck
 - [`infra/terraform/`](infra/terraform/) — Terraform for core GCP service enablement (fmt/validate/lint in CI)
 - [`.github/workflows/`](.github/workflows/) — CI + ops workflows
 - [`.github/dependabot.yml`](.github/dependabot.yml) — weekly dependency monitoring for Functions, TypeScript Playwright automation, and GitHub Actions
+- [`SECURITY.md`](SECURITY.md) — supported-version and vulnerability-reporting guidance
+- [`firestore.rules`](firestore.rules) — deny-all direct client access to Firestore
 - `firebase.json` / `.firebaserc` — Firebase project configuration
 
 ---
 
 ## CI / Ops workflows (GitHub Actions)
 
-- **Functions CI** — lint + tests on push and pull requests
-- **Docker Functions CI** — lint + tests in a container for parity checks
-- **Terraform (fmt, validate & lint)** — formatting, validation and lint checks for `infra/terraform`
-- **Deployed API Smokecheck (Go)** — scheduled and manual deployed `/api/health` verification, with `gofmt`, `go vet`, and `go test` enforced before the runtime check
-- **Postman Newman** — API regression and smoke execution using the Postman collection and environment
+| Workflow | Trigger | Validation and maintained baseline |
+| --- | --- | --- |
+| **Functions CI** | Pushes to `main`/`feature/platform-readiness`; all pull requests | Node.js 22 through `actions/setup-node@v7`; `npm ci`; ESLint; Jest route tests; Pact consumer and provider tests |
+| **Docker Functions CI** | Pushes to `main`/`chore/docker-ci`; all pull requests | Builds the Node.js 22 Alpine Functions image and runs ESLint plus Jest inside the container |
+| **CodeQL** | Pushes and pull requests to `main`; weekly schedule | JavaScript/TypeScript analysis through `github/codeql-action@v4` |
+| **Dependency Review** | All pull requests | Dependency-diff policy gate through `actions/dependency-review-action@v5` |
+| **Terraform (fmt, validate & lint)** | Changes under `infra/terraform/` or its workflow | Terraform `1.6.6` through `hashicorp/setup-terraform@v4`; formatting, validation, and TFLint through `terraform-linters/setup-tflint@v6` |
+| **Deployed API Smokecheck (Go)** | Daily schedule; manual dispatch | Go `1.26.0` through `actions/setup-go@v7`; `gofmt`, `go vet`, `go test`, deployed `/api/health`, and failure-only Slack notification |
+| **Postman Newman API Checks** | Pushes and pull requests to `main`; manual dispatch | Node.js 20 through `actions/setup-node@v7`; Newman `6.2.2`; Postman API regression collection |
 
 ### Required GitHub Actions secrets
 
@@ -251,28 +265,33 @@ These are stored in **Repo -> Settings -> Secrets and variables -> Actions**.
 
 ## REST API
 
-**Base URL:** https://firebase.stephendaly.dev/api
+**Base URL:** <https://firebase.stephendaly.dev/api>
 
 > If you open the base URL in a browser, you’ll see a small JSON response (`GET /`), which makes manual checks quicker.
 
 ### `GET /`
+
 Convenience root route for quick browser checks.
 
 Expected response:
+
 ```json
 { "ok": true, "message": "Firebase Serverless REST API is running" }
 ```
 
 ### `GET /health`
+
 Quick check that the API is running.
 
 Expected response:
+
 ```json
 { "ok": true, "message": "API is running" }
 ```
 
 ### `GET /comments`
-Returns the latest comments (newest first).
+
+Returns up to the latest 50 comments (newest first).
 
 <details>
 <summary>Example response</summary>
@@ -287,17 +306,22 @@ Returns the latest comments (newest first).
   }
 ]
 ```
+
 </details>
 
 ### `POST /comments`
+
 Creates a new comment.
 
 Example request body:
+
 ```json
 { "handle": "@trailrunner23", "text": "Great run today!" }
 ```
 
 After posting a comment, it appears in the Latest comments list (end-to-end check from website -> API -> Firestore -> website).
+
+Comment creation is limited to 10 submissions per client within a 15-minute window. Further submissions receive `429 Too Many Requests` until the window resets.
 
 ![Website after posting a comment](public/images/postcomment.jpg)
 
@@ -308,6 +332,7 @@ After posting a comment, it appears in the Latest comments list (end-to-end chec
 This repo includes an OpenAPI 3.0 specification and Swagger UI for the deployed API.
 
 ### Files
+
 - OpenAPI spec: `public/openapi/openapi.yaml`
 - Swagger UI: `public/swagger/index.html`
 - Postman collection: `postman/firebase-serverless-rest-api.postman_collection.json`
@@ -315,18 +340,19 @@ This repo includes an OpenAPI 3.0 specification and Swagger UI for the deployed 
 - Newman workflow: `.github/workflows/postman-newman.yml`
 
 ### Test layer separation
+
 - OpenAPI and Swagger: API contract and interactive documentation
 - Postman and Newman: reviewer-friendly API regression and smoke checks
 - Playwright: deployed endpoint automation
 - Pact: consumer and provider contract verification
 - Go smokecheck: lightweight live health verification
 
-
 ## Testing the API with Postman
 
 You can test the API directly (without the website) using Postman.
 
 ### 1) Health check
+
 - Method: `GET`
 - URL: `https://firebase.stephendaly.dev/api/health`
 - Expected: `200 OK` with JSON showing the API is running
@@ -334,6 +360,7 @@ You can test the API directly (without the website) using Postman.
 ![Expected result for GET /health](public/images/pm-health.jpg)
 
 ### 2) List comments
+
 - Method: `GET`
 - URL: `https://firebase.stephendaly.dev/api/comments`
 - Expected: `200 OK` with a JSON list (array) of comments
@@ -341,13 +368,16 @@ You can test the API directly (without the website) using Postman.
 ![Expected result for GET /comments](public/images/pm-getcomment.jpg)
 
 ### 3) Create a comment
+
 - Method: `POST`
 - URL: `https://firebase.stephendaly.dev/api/comments`
 - Header: `Content-Type: application/json`
 - Body (raw JSON):
+
 ```json
 { "handle": "@trailrunner23", "text": "Posting from Postman" }
 ```
+
 - Expected: `201 Created` with a JSON response containing a new `id`
 
 ![Expected result for POST /comments](public/images/pm-postcomment.jpg)
@@ -362,6 +392,8 @@ Quick check: run `GET /comments` again and confirm the new comment appears near 
 - Blocks the handle `hacker` (validated on the website and again on the API)
 - Displays comments as **text**, not rendered HTML/JavaScript (helps prevent script injection)
 - Restricts cross-origin requests to approved deployed, preview, and local front-end origins
+- Rate-limits comment creation to 10 requests per 15-minute window and returns a tested `429` response when exceeded
+- Uses tracked deny-all `firestore.rules` to prevent direct client reads and writes; the server-side Admin SDK performs API-controlled access
 - Limits the function to 1 instance (`maxInstances: 1`) to control cost and keep debugging simple
 
 ---
@@ -391,30 +423,37 @@ Those areas remain outside Terraform in this repo by design.
 
 ---
 
-## Tech stack
+## Tech stack and validated versions
 
 ### Application runtime
+
 - Firebase Hosting
-- Firebase Cloud Functions v2 (Node.js) + Express
+- Firebase Cloud Functions v2 on Node.js 22
+- `firebase-functions` `7.3.0` and `firebase-admin` `13.10.0`
+- Express `5.2.1`, `cors` `2.8.6`, and `express-rate-limit` `8.6.1`
 - Firestore
 - HTML / CSS / JavaScript (minimal UI harness)
 
 ### API and verification
-- OpenAPI 3.0
+
+- OpenAPI 3.0.3
 - Swagger UI
-- Jest + Supertest
-- Playwright
-- Pact
-- Postman + Newman
-- Go deployed smokecheck
+- Jest `30.4.2`, Supertest `7.2.2`, and `firebase-functions-test` `3.5.0`
+- Pact `17.0.1` consumer and provider contract verification
+- Playwright `1.62.0` with TypeScript `7.0.2` and `@types/node` `25.9.5`
+- ESLint `10.7.0`
+- Postman with Newman `6.2.2`
+- Go `1.26.0` deployed smokecheck
 
 ### Infrastructure and automation
-- Terraform
+
+- Terraform `1.6.6`
 - TFLint
-- GitHub Actions
-- Slack failure alerts
-- CodeQL
-- Dependabot
+- GitHub Actions using `actions/checkout@v7`, `actions/setup-node@v7`, and `actions/setup-go@v7`
+- Slack failure alerts using `slackapi/slack-github-action@v4`
+- CodeQL using `github/codeql-action@v4`
+- Dependency Review using `actions/dependency-review-action@v5`
+- Weekly Dependabot monitoring for both npm projects and GitHub Actions
 
 ---
 
